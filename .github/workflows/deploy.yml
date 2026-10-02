@@ -17,6 +17,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: Portfolio
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,6 +33,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
+          cache-dependency-path: Portfolio/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -41,10 +46,16 @@ jobs:
       - name: Compile production files
         run: pnpm run build
 
+      - name: Prepare static output for Pages
+        run: |
+          # public/contact.html is only the Netlify Forms stub; it would shadow the /contact page.
+          rm -f dist/client/contact.html
+          cp dist/client/index.html dist/client/404.html
+
       - name: Upload production artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: Portfolio/dist/client
 
   deploy:
     needs: build
