@@ -28,11 +28,8 @@ export const skillGroups = [
   },
 ]
 
-/** Route a /public/img asset through the Netlify Image CDN when on Netlify. */
-export function img(file: string, width: number) {
-  if (import.meta.env.VITE_NETLIFY) {
-    return `/.netlify/images?url=/img/${file}&w=${width}&fm=webp`
-  }
+/** Path to a file in /public/img. */
+export function img(file: string, _width?: number) {
   return `/img/${file}`
 }
 
