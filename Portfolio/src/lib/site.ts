@@ -41,9 +41,12 @@ export const skillGroups = [
   },
 ]
 
-/** Route a /public/img asset through the Netlify Image CDN. */
+/** Route a /public/img asset through the Netlify Image CDN when on Netlify. */
 export function img(file: string, width: number) {
-  return `/.netlify/images?url=/img/${file}&w=${width}&fm=webp`
+  if (import.meta.env.VITE_NETLIFY) {
+    return `/.netlify/images?url=/img/${file}&w=${width}&fm=webp`
+  }
+  return `/img/${file}`
 }
 
 /** Content bodies are short markdown bullet lists; render them to HTML. */

@@ -97,7 +97,7 @@ function Contact() {
                 e.preventDefault()
                 setStatus('sending')
                 const formData = new FormData(e.currentTarget)
-                fetch('/contact.html', {
+                fetch(import.meta.env.VITE_FORM_ENDPOINT || '/contact.html', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                   body: new URLSearchParams(

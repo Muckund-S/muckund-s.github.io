@@ -13,8 +13,11 @@ const config = defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    netlify(),
-    tanstackStart(),
+    // Netlify's adapter builds a server function; GitHub Pages needs plain static files.
+    ...(process.env.NETLIFY ? [netlify()] : []),
+    tanstackStart({
+      prerender: { enabled: true, crawlLinks: true },
+    }),
     viteReact(),
   ],
 })
