@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { allEducations, allJobs } from 'content-collections'
-import { Award, Download, MapPin } from 'lucide-react'
+import { Download, FileText, MapPin } from 'lucide-react'
 import { md, profile, skillGroups } from '@/lib/site'
 
 export const Route = createFileRoute('/resume')({
@@ -13,120 +13,150 @@ const schools = [...allEducations].sort((a, b) => a.order - b.order)
 
 function Resume() {
   return (
-    <div className="relative">
-      <div className="blueprint-grid absolute inset-x-0 top-0 h-[480px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-      <div className="relative mx-auto max-w-6xl px-5 pb-24 pt-36 md:pb-32">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="label animate-rise">Resume</p>
-            <h1 className="animate-rise delay-1 mt-4 font-display text-5xl font-semibold tracking-tight text-steel-100 md:text-7xl">
-              Experience<span className="text-burn-500">.</span>
-            </h1>
-          </div>
+    <div className="mx-auto max-w-4xl px-6 pb-24 pt-36">
+      <div className="text-center">
+        <h1 className="display text-5xl font-extrabold text-white md:text-7xl">
+          Experience
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg">
+          Design team work, research-style testing, and student leadership,
+          alongside a mechanical engineering degree at Waterloo.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a
-            href={profile.resume}
+            href={profile.resumeFile}
+            download
+            className="inline-flex items-center gap-2 rounded-full bg-sky-400 px-6 py-3 text-sm font-semibold text-ink-950 hover:bg-white"
+          >
+            <Download size={16} /> Download Resume
+          </a>
+          <a
+            href={profile.resumeFile}
             target="_blank"
             rel="noopener noreferrer"
-            className="animate-rise delay-2 inline-flex w-fit items-center gap-2 rounded-full bg-burn-500 px-6 py-3.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-burn-400"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
           >
-            <Download size={16} /> Download resume
+            <FileText size={16} /> View Resume
           </a>
         </div>
-
-        <div className="mt-20 grid gap-16 lg:grid-cols-[220px_1fr]">
-          <h2 className="label lg:sticky lg:top-28 lg:self-start">
-            <span className="text-burn-400">01</span> / Work & leadership
-          </h2>
-          <div className="space-y-6">
-            {jobs.map((j) => (
-              <article
-                key={j._meta.path}
-                className="group rounded-2xl border border-white/[0.06] bg-ink-900 p-6 transition-colors hover:border-white/15 md:p-8"
-              >
-                <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-tight text-steel-100">
-                      {j.company}
-                    </h3>
-                    <p className="mt-1 text-burn-400">{j.jobTitle}</p>
-                  </div>
-                  <div className="md:text-right">
-                    <p className="label !text-steel-300">
-                      {j.startDate} to {j.endDate ?? 'Present'}
-                    </p>
-                    <p className="mt-1 inline-flex items-center gap-1 text-sm text-steel-400">
-                      <MapPin size={13} /> {j.location}
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className="bullets mt-6 text-[15px]"
-                  dangerouslySetInnerHTML={{ __html: md(j.content) }}
-                />
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {j.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/10 px-3 py-1 text-xs"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <h2 className="label lg:sticky lg:top-28 lg:self-start">
-            <span className="text-burn-400">02</span> / Education
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {schools.map((s) => (
-              <article
-                key={s._meta.path}
-                className="rounded-2xl border border-white/[0.06] bg-ink-900 p-6 md:p-8"
-              >
-                <p className="label !text-steel-300">
-                  {s.startDate} to {s.endDate ?? 'Present'}
-                </p>
-                <h3 className="mt-3 font-display text-xl font-semibold text-steel-100">
-                  {s.school}
-                </h3>
-                <p className="mt-1 text-sm text-burn-400">{s.degree}</p>
-                <ul className="mt-6 space-y-3">
-                  {s.highlights.map((h) => (
-                    <li key={h} className="flex gap-3 text-[15px]">
-                      <Award size={16} className="mt-0.5 shrink-0 text-steel-400" />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-
-          <h2 className="label lg:sticky lg:top-28 lg:self-start">
-            <span className="text-burn-400">03</span> / Skills
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2">
-            {skillGroups.map((g) => (
-              <div key={g.title}>
-                <p className="font-display font-semibold text-steel-100">{g.title}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {g.items.map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-lg border border-white/[0.06] bg-ink-900 px-3 py-1.5 text-sm text-steel-300"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
+
+      <Section title="Work Experience">
+        {jobs.map((j) => (
+          <Entry
+            key={j._meta.path}
+            title={j.jobTitle}
+            org={j.company}
+            place={j.location}
+            dates={`${j.startDate} – ${j.endDate ?? 'Present'}`}
+            tags={j.tags}
+            body={j.content}
+          />
+        ))}
+      </Section>
+
+      <Section title="Education">
+        {schools.map((s) => (
+          <Entry
+            key={s._meta.path}
+            title={s.degree}
+            org={s.school}
+            dates={`${s.startDate} – ${s.endDate ?? 'Present'}`}
+            list={s.highlights}
+          />
+        ))}
+      </Section>
+
+      <Section title="Technical Skills">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {skillGroups.map((g) => (
+            <div key={g.title} className="rounded-xl border border-white/10 bg-white/[0.03] p-6">
+              <h3 className="display text-lg font-bold text-white">{g.title}</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {g.items.map((i) => (
+                  <span key={i} className="rounded-full bg-white/[0.07] px-3 py-1 text-sm text-steel-100">
+                    {i}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+    </div>
+  )
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-20">
+      <h2 className="display text-3xl font-bold text-white">{title}</h2>
+      <div className="mt-8 space-y-6 border-l border-white/15 pl-8 md:ml-2">
+        {children}
+      </div>
+    </section>
+  )
+}
+
+function Entry({
+  title,
+  org,
+  place,
+  dates,
+  tags,
+  body,
+  list,
+}: {
+  title: string
+  org: string
+  place?: string
+  dates: string
+  tags?: string[]
+  body?: string
+  list?: string[]
+}) {
+  return (
+    <div className="relative">
+      <span className="absolute -left-[37px] top-8 h-2.5 w-2.5 rounded-full bg-sky-400" />
+      <article className="rounded-xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <h3 className="display text-2xl font-bold text-white">{title}</h3>
+        <p className="mt-1 flex flex-wrap items-center gap-x-3 text-steel-300">
+          <span className="font-medium text-sky-400">{org}</span>
+          {place && (
+            <span className="inline-flex items-center gap-1 text-sm">
+              <MapPin size={13} /> {place}
+            </span>
+          )}
+        </p>
+        <p className="mt-1 text-sm text-steel-400">{dates}</p>
+        {body && (
+          <div
+            className="bullets mt-5 text-[15px]"
+            dangerouslySetInnerHTML={{ __html: md(body) }}
+          />
+        )}
+        {list && (
+          <ul className="mt-5 space-y-2.5 text-[15px]">
+            {list.map((h) => (
+              <li
+                key={h}
+                className="relative pl-5 leading-relaxed before:absolute before:left-0 before:top-[0.65em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-sky-400/70"
+              >
+                {h}
+              </li>
+            ))}
+          </ul>
+        )}
+        {tags && (
+          <div className="mt-5 flex flex-wrap gap-2">
+            {tags.map((t) => (
+              <span key={t} className="rounded-full bg-white/[0.07] px-3 py-1 text-xs text-steel-100">
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+      </article>
     </div>
   )
 }

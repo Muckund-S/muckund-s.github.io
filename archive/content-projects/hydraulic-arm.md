@@ -3,8 +3,7 @@ title: Hydraulic Robotic Arm
 subtitle: Multi-Axis Mechanical Arm
 description: A multi-axis arm driven by a closed-loop hydraulic system, with a biomimetic three-finger claw and a custom rotary belt base.
 category: Robotics
-order: 3
-featured: true
+order: 6
 image: arm.png
 tags: ["Hydraulics", "Biomimetic Design", "Belt Drives", "Prototyping"]
 metrics:

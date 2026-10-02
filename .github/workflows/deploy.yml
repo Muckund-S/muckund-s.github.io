@@ -48,8 +48,6 @@ jobs:
 
       - name: Prepare static output for Pages
         run: |
-          # public/contact.html is only the Netlify Forms stub; it would shadow the /contact page.
-          rm -f dist/client/contact.html
           cp dist/client/index.html dist/client/404.html
 
       - name: Upload production artifact

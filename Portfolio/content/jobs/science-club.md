@@ -4,7 +4,7 @@ company: Science Club
 location: Bur Oak Secondary School
 startDate: Sep 2023
 endDate: Jun 2025
-order: 2
+order: 3
 tags: ["Leadership", "Budgeting", "STEM Outreach"]
 ---
 

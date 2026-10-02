@@ -3,8 +3,7 @@ title: SpaceZ
 subtitle: Small-Scale Model Rocket
 description: A team-built model rocket simulated in OpenRocket, with fins and a nose cone designed in CAD and 3D printed. It was launched and the flight was compared against the simulation.
 category: Aerospace
-order: 2
-featured: true
+order: 5
 image: rocket.png
 tags: ["OpenRocket", "SolidWorks", "3D Printing", "Flight Simulation"]
 metrics:

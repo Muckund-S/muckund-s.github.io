@@ -6,7 +6,7 @@ import '../styles.css'
 
 const siteName = 'Muckund Sharma | Mechanical Engineering Portfolio'
 const siteDescription =
-  'Mechanical Engineering student at the University of Waterloo. Projects in mechanism design, aerospace, robotics, and fabrication.'
+  'Mechanical Engineering student at the University of Waterloo. Projects in aerospace, CFD and FEA, composites, and fabrication.'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -43,7 +43,7 @@ export const Route = createRootRoute({
       },
       {
         property: 'og:image',
-        content: '/img/hero.png',
+        content: '/img/rc-aircraft.jpg',
       },
       {
         name: 'twitter:card',

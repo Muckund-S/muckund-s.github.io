@@ -3,8 +3,7 @@ title: MECHANICLAW!
 subtitle: Fully Mechanical Claw Machine
 description: A hand-cranked claw machine that turns user input into multi-axis motion using only gears, linkages, and drive belts. It has no motors and no electronics.
 category: Mechanism Design
-order: 1
-featured: true
+order: 4
 image: claw.png
 tags: ["SolidWorks", "Gear Trains", "Linkages", "Belt Drives", "DFM"]
 metrics:

@@ -3,7 +3,7 @@ title: Concrete T-Beam
 subtitle: Structural Design & Fabrication
 description: An inverted T-section reinforced concrete beam that uses over 20% less material than a standard rectangular section.
 category: Structures
-order: 5
+order: 8
 image: beam.png
 tags: ["Structural Analysis", "Reinforced Concrete", "Shear Design", "Formwork"]
 metrics:
