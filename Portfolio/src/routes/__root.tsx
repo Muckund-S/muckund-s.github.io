@@ -43,7 +43,7 @@ export const Route = createRootRoute({
       },
       {
         property: 'og:image',
-        content: '/img/hero.png',
+        content: '/img/rc-aircraft.jpg',
       },
       {
         name: 'twitter:card',

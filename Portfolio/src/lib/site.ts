@@ -9,16 +9,8 @@ export const profile = {
   location: 'Waterloo, ON',
   email: 'm269shar@uwaterloo.ca',
   linkedin: 'https://ca.linkedin.com/in/muckund-sharma-aa3717363',
-  resume:
-    'https://drive.google.com/file/d/18nwD31N6SlahTynJUpXiKJqP8qIkoO65/view?usp=sharing',
+  resumeFile: '/Muckund-Sharma-Resume.pdf',
 }
-
-export const stats = [
-  { value: '3.98', label: 'GPA' },
-  { value: '8', label: 'Projects built' },
-  { value: '250+', label: 'Club members led' },
-  { value: '100+', label: 'Families supported' },
-]
 
 export const skillGroups = [
   {
