@@ -4,7 +4,7 @@ company: Feeding Markham
 location: Markham, ON
 startDate: Sep 2024
 endDate: Jun 2025
-order: 3
+order: 4
 tags: ["Non-Profit", "Operations", "Community Partnerships"]
 ---
 

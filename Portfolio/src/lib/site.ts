@@ -7,37 +7,32 @@ export const profile = {
   school: 'University of Waterloo',
   tagline: 'Driven to advance and redefine the next era of flight.',
   location: 'Waterloo, ON',
+  email: 'm269shar@uwaterloo.ca',
   linkedin: 'https://ca.linkedin.com/in/muckund-sharma-aa3717363',
   resume:
     'https://drive.google.com/file/d/18nwD31N6SlahTynJUpXiKJqP8qIkoO65/view?usp=sharing',
 }
 
 export const stats = [
-  { value: '4.0', label: 'GPA · 1A' },
-  { value: '5', label: 'Hands-on builds' },
+  { value: '3.98', label: 'GPA' },
+  { value: '8', label: 'Projects built' },
   { value: '250+', label: 'Club members led' },
   { value: '100+', label: 'Families supported' },
 ]
 
 export const skillGroups = [
-  { title: 'CAD', items: ['SolidWorks', 'AutoCAD'] },
   {
-    title: 'Design & Analysis',
-    items: [
-      'SolidWorks Simulation (FEA)',
-      'Design for Manufacturing',
-      'Engineering Drawings (GD&T)',
-    ],
+    title: 'CAD & Simulation',
+    items: ['SolidWorks (CSWA Certified)', 'AutoCAD', 'Ansys Mechanical/Fluent', 'CATIA', 'FEA', 'CFD'],
   },
-  { title: 'Programming', items: ['MATLAB', 'C++', 'Python', 'Java'] },
+  { title: 'Programming & Data', items: ['Python', 'MATLAB', 'C++', 'Java', 'Git'] },
   {
-    title: 'Fabrication',
-    items: [
-      'CNC & Manual Machining',
-      'Electrical Fabrication',
-      '3D Printing',
-      'Woodworking',
-    ],
+    title: 'Manufacturing & Fabrication',
+    items: ['CNC Machining', 'Milling', 'Lathe', '3D Printing', 'Laser Cutting', 'GD&T', 'Soldering'],
+  },
+  {
+    title: 'Electronics',
+    items: ['Arduino', 'RC Systems', 'Brushless Motors/ESCs', 'Servos'],
   },
 ]
 

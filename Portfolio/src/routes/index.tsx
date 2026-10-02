@@ -126,7 +126,7 @@ function Home() {
                 </div>
               </div>
               <p className="mt-4 text-sm leading-relaxed">
-                4.0 GPA in 1A, President's Scholarship of Distinction, and the
+                3.98 GPA, President's Scholarship of Distinction, and the
                 Class of 1988 "BatMech" Leadership Award.
               </p>
             </div>

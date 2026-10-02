@@ -3,7 +3,7 @@ title: Roman Ballista
 subtitle: Scale Model Siege Engine
 description: A wooden scale-model ballista with a custom winch and a 75° adjustable pitch ladder for precise trajectory control.
 category: Fabrication
-order: 4
+order: 7
 image: ballista.png
 tags: ["Woodworking", "Machining", "Projectile Motion", "Winch Design"]
 metrics:

@@ -44,6 +44,10 @@ const projects = defineCollection({
     order: z.number(),
     featured: z.boolean().optional(),
     image: z.string(),
+    gallery: z.array(z.object({ file: z.string(), caption: z.string() })).optional(),
+    problem: z.array(z.string()).optional(),
+    approach: z.array(z.string()).optional(),
+    result: z.array(z.string()).optional(),
     tags: z.array(z.string()),
     metrics: z
       .array(z.object({ value: z.string(), label: z.string() }))

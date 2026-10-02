@@ -82,11 +82,55 @@ export function ProjectDialog({
             {project.description}
           </p>
 
-          <h3 className="label mt-8">What I did</h3>
-          <div
-            className="bullets mt-4 text-[15px]"
-            dangerouslySetInnerHTML={{ __html: md(project.content) }}
-          />
+          {project.problem && project.approach && project.result ? (
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {(
+                [
+                  ['Problem', project.problem],
+                  ['Approach', project.approach],
+                  ['Result', project.result],
+                ] as const
+              ).map(([title, items]) => (
+                <div
+                  key={title}
+                  className="rounded-2xl border border-white/5 bg-ink-800 p-5"
+                >
+                  <h3 className="label !text-burn-400">{title}</h3>
+                  <ul className="mt-3 list-disc space-y-2 pl-4 text-[14px] leading-relaxed text-steel-300">
+                    {items.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <h3 className="label mt-8">What I did</h3>
+              <div
+                className="bullets mt-4 text-[15px]"
+                dangerouslySetInnerHTML={{ __html: md(project.content) }}
+              />
+            </>
+          )}
+
+          {project.gallery && (
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {project.gallery.map((g) => (
+                <figure key={g.file}>
+                  <img
+                    src={img(g.file, 1000)}
+                    alt={g.caption}
+                    loading="lazy"
+                    className="w-full rounded-xl border border-white/5 bg-white object-contain"
+                  />
+                  <figcaption className="mt-2 text-xs text-steel-400">
+                    {g.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
 
           <h3 className="label mt-8">Tools & methods</h3>
           <div className="mt-3 flex flex-wrap gap-2">
