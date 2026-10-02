@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss" source("../");
+
+@plugin "tailwindcss-animate";
+
+@theme {
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  --color-ink-950: #07080a;
+  --color-ink-900: #0c0e11;
+  --color-ink-800: #14171c;
+  --color-ink-700: #1d2128;
+  --color-ink-600: #2a2f38;
+  --color-steel-400: #8b93a1;
+  --color-steel-300: #b3bac6;
+  --color-steel-100: #e8ebf0;
+  --color-burn-500: #ff6a2b;
+  --color-burn-400: #ff8a52;
+  --color-ice-400: #6cc6ff;
+
+  --animate-rise: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  @apply m-0 bg-ink-950 font-sans text-steel-300 antialiased;
+}
+
+::selection {
+  background: var(--color-burn-500);
+  color: var(--color-ink-950);
+}
+
+/* Faint engineering grid used behind hero/section backgrounds */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.label {
+  @apply font-mono text-[11px] uppercase tracking-[0.2em] text-steel-400;
+}
+
+.delay-1 { animation-delay: 80ms; }
+.delay-2 { animation-delay: 160ms; }
+.delay-3 { animation-delay: 240ms; }
+.delay-4 { animation-delay: 320ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Bullet lists rendered from content markdown */
+.bullets ul {
+  @apply space-y-3;
+}
+.bullets li {
+  @apply relative pl-5 leading-relaxed;
+}
+.bullets li::before {
+  content: '';
+  @apply absolute left-0 top-[0.7em] h-px w-2.5 bg-burn-500;
+}
