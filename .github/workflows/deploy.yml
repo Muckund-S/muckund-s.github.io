@@ -34,6 +34,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Pre-build content collections
+        run: pnpm exec content-collections build --config content-collections.ts
+        continue-on-error: true
+
       - name: Compile production files
         run: pnpm run build
 
