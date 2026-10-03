@@ -31,7 +31,7 @@ tags: ["SolidWorks", "XFoil", "XFLR5", "ANSYS Fluent", "CFD", "EPS Foam", "RC Sy
 I took this aircraft from requirements to flight on my own: CAD, airfoil selection, 2D and 3D aerodynamic analysis, fabrication, and iterative flight testing. The main constraint was low Reynolds number (Re ≈ 100k), where airfoil performance degrades and small design choices matter.
 
 <figure>
-<img src="/img/rc-aircraft.jpg" alt="Render of the finished MX-01" loading="lazy" />
+<img src="/img/rc-livery.jpg" alt="MX-01 on a table, with its red and white livery and navigation lights on" loading="lazy" />
 <figcaption>MX-01 with its livery.</figcaption>
 </figure>
 
@@ -49,8 +49,13 @@ I took this aircraft from requirements to flight on my own: CAD, airfoil selecti
 | Control | FlySky FS-i6 / iA6B receiver, 4× SG90 servos |
 
 <figure>
-<img src="/img/rc-drawing.jpg" alt="MX-01 engineering drawings" loading="lazy" />
-<figcaption>Engineering drawings of the airframe, produced in SolidWorks.</figcaption>
+<img src="/img/rc-cad-model.jpg" alt="SolidWorks model of MX-01" loading="lazy" />
+<figcaption>The SolidWorks model of MX-01.</figcaption>
+</figure>
+
+<figure>
+<img src="/img/rc-drawing-sheet.png" alt="MX-01 engineering drawing sheet with side, front and top views and an isometric view" loading="lazy" />
+<figcaption>Engineering drawing sheet: side, front and top views plus isometric (click to enlarge).</figcaption>
 </figure>
 
 ## 1. Requirements and sizing
