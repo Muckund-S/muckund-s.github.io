@@ -19,9 +19,10 @@ export const skillGroups = [
     title: 'CAD, Simulation & Analysis',
     items: [
       'SolidWorks (CSWA Certified)',
-      'AutoCAD (4+ years)',
+      'AutoCAD',
       'CATIA 3DEXPERIENCE (Mechanical Designer Certified)',
       'ANSYS Mechanical / Fluent',
+      'XFLR5',
       'FEA',
       'CFD',
       'GD&T',

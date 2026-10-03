@@ -30,7 +30,11 @@ function Media({ project }: { project: (typeof allProjects)[number] }) {
   if (project.youtube) {
     return (
       <div className="mt-8">
-        <VideoEmbed id={project.youtube} title={`${project.title} video`} />
+        <VideoEmbed
+          id={project.youtube}
+          vertical={project.youtubeVertical}
+          title={`${project.title} video`}
+        />
       </div>
     )
   }

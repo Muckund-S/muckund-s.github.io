@@ -24,27 +24,30 @@ function Home() {
               </span>
             </span>
           </h1>
-          <div className="mt-8 flex items-center gap-3">
-            <p className="wide -mr-[0.18em] text-lg font-semibold text-white sm:text-xl">
-              Mechanical Engineer
-            </p>
-            {profile.schoolLogo && (
-              <>
-                <img
-                  src={img(profile.schoolLogo)}
-                  alt={profile.school}
-                  className="h-9 w-auto sm:h-11"
-                />
-              </>
-            )}
-          </div>
-          <p className="mt-2 text-steel-400">
-            {profile.school} · BASc Mechanical Engineering
+          <p className="wide mt-8 text-lg font-semibold text-white sm:text-xl">
+            Mechanical Engineer
           </p>
+          <div className="mt-3 flex items-center gap-3">
+            {profile.schoolLogo && (
+              <img
+                src={img(profile.schoolLogo)}
+                alt=""
+                aria-hidden="true"
+                className="h-9 w-auto sm:h-10"
+              />
+            )}
+            <p className="text-steel-400">
+              {profile.school} · BASc Mechanical Engineering
+            </p>
+          </div>
         </div>
         <div className="fade-in" style={{ animationDelay: '150ms' }}>
-          <p className="display text-3xl font-bold leading-snug text-white sm:text-4xl">
-            {profile.tagline}
+          <p className="display max-w-md text-[1.7rem] font-normal leading-[1.25] tracking-tight text-steel-100 sm:text-[2rem]">
+            Driven to advance
+            <br />
+            and redefine
+            <br />
+            <span className="text-sky-400">the next era of flight.</span>
           </p>
           <div className="mt-8 flex items-center gap-5 text-steel-300">
             <a

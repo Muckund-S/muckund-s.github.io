@@ -6,7 +6,18 @@ import { useState } from 'react'
  * a custom play button; only after the click does it load the YouTube player
  * (privacy-enhanced domain, no related videos, minimal branding).
  */
-export function VideoEmbed({ id, title }: { id: string; title: string }) {
+export function VideoEmbed({
+  id,
+  title,
+  vertical = false,
+}: {
+  id: string
+  title: string
+  vertical?: boolean
+}) {
+  const shape = vertical
+    ? 'mx-auto aspect-[9/16] w-full max-w-[360px]'
+    : 'aspect-video w-full'
   const [playing, setPlaying] = useState(false)
   const [poster, setPoster] = useState<string | null>(
     `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
@@ -19,7 +30,7 @@ export function VideoEmbed({ id, title }: { id: string; title: string }) {
         title={title}
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
         allowFullScreen
-        className="aspect-video w-full rounded-xl border border-white/10 bg-black"
+        className={`${shape} rounded-xl border border-white/10 bg-black`}
       />
     )
   }
@@ -30,7 +41,7 @@ export function VideoEmbed({ id, title }: { id: string; title: string }) {
       data-nozoom
       onClick={() => setPlaying(true)}
       aria-label={`Play video: ${title}`}
-      className="group relative block aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-ink-800 to-ink-950 text-left"
+      className={`group relative block ${shape} overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-ink-800 to-ink-950 text-left`}
     >
       {poster && (
       <img
