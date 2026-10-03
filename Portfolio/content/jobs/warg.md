@@ -4,6 +4,7 @@ company: Waterloo Aerial Robotics Group (WARG)
 location: Waterloo, ON
 startDate: Sep 2026
 endDate: Present
+logo: logo-warg.png
 order: 0
 tags: ["SolidWorks", "FEA", "Carbon Fiber", "3D Printing"]
 ---

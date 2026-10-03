@@ -31,24 +31,6 @@ const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, abo
 const AOA_START = 0
 const AOA_END = 16
 
-// XFLR5 results for the MX-01 wing (Re ~ 100k, 10 m/s lifting-line run).
-const XFLR5 = {
-  aoa: [0, 2, 4, 6, 8],
-  cl: [0.231, 0.411, 0.574, 0.728, 0.873],
-  ld: [10.2, 14.1, 15.0, 14.5, 13.3],
-}
-
-function interp(xs: number[], ys: number[], x: number): number | null {
-  if (x < xs[0] || x > xs[xs.length - 1]) return null
-  for (let i = 0; i < xs.length - 1; i++) {
-    if (x <= xs[i + 1]) {
-      const t = (x - xs[i]) / (xs[i + 1] - xs[i])
-      return ys[i] + t * (ys[i + 1] - ys[i])
-    }
-  }
-  return null
-}
-
 /** Lift coefficient from the Kutta-Joukowski theorem (U = 1). */
 function liftCoefficient(aoaDeg: number) {
   const a = (aoaDeg * Math.PI) / 180
@@ -115,8 +97,6 @@ export function WingLab() {
   const [aoa, setAoa] = useState(AOA_START)
 
   const cl = liftCoefficient(aoa)
-  const xCl = interp(XFLR5.aoa, XFLR5.cl, aoa)
-  const xLd = interp(XFLR5.aoa, XFLR5.ld, aoa)
   const atDesign = Math.abs(aoa - DESIGN_AOA) < 0.35
 
   useEffect(() => {
@@ -360,29 +340,6 @@ export function WingLab() {
 
             <p className="mt-4 text-steel-400">Lift coefficient (idealised)</p>
             <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
-
-            <div className="mt-5 border-t border-white/15 pt-4">
-              <p className="text-steel-400">XFLR5, MX-01 wing</p>
-              <div className="mt-1 flex gap-7">
-                <p className="text-steel-300">
-                  CL{' '}
-                  <span className="display text-xl font-bold text-white">
-                    {xCl === null ? '–' : xCl.toFixed(2)}
-                  </span>
-                </p>
-                <p className="text-steel-300">
-                  L/D{' '}
-                  <span className="display text-xl font-bold text-white">
-                    {xLd === null ? '–' : xLd.toFixed(1)}
-                  </span>
-                </p>
-              </div>
-              <p className="mt-1 text-xs leading-snug text-steel-400">
-                {xCl === null
-                  ? 'Outside the 0–8° I ran in XFLR5.'
-                  : 'Interpolated between the XFLR5 points.'}
-              </p>
-            </div>
 
             <p
               className={`mt-4 text-xs leading-snug ${atDesign ? 'text-burn-400' : 'text-steel-400'}`}

@@ -7,42 +7,29 @@ export const Route = createFileRoute('/')({
   component: Home,
 })
 
-const focus = [
-  {
-    title: 'Aerodynamics & CFD',
-    body: 'Sized and analyzed the wing of my RC trainer, MX-01, at Re ≈ 100k: XFoil and XFLR5 for airfoil and lifting-line results (peak L/D ≈ 15), then a 3D ANSYS Fluent cross-check (best simulated L/D ≈ 13.9 at 2.26°). I read pressure, velocity and turbulence fields to see where lift and drag come from, then built it and flew it 12 times.',
-  },
-  {
-    title: 'Structures & FEA',
-    body: 'For WARG I designed a carbon-fiber landing gear with a deliberate breakaway joint and checked it with orthotropic linear-static FEA across a 1–4g sweep: 3.81 factor of safety at 1g, and failure predicted at the sacrificial neck at 4g. Mesh refinement moved peak stress by only 1.22%.',
-  },
-  {
-    title: 'Testing, Manufacturing & Data',
-    body: 'Compression-tested six fiberglass laminates for the Polaris airframe to ASTM D695 / DIN EN 2850 on a 15 kN system, machined the Boeing BSS 7260 fixture on the mill and lathe, and wrote the Python pipeline that turned raw load data into stress-strain curves.',
-  },
-  {
-    title: 'Delivery & Teamwork',
-    body: 'Built a Jira workspace for a large annual volunteer event so every task had an owner and live status, mentored and evaluated six summer program staff at YRES, and coordinated procurement research across 20+ composite suppliers for Waterloo Rocketry.',
-  },
-]
-
 function Home() {
   return (
     <>
       <section className="mx-auto grid min-h-[78vh] max-w-6xl content-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.35fr_1fr] lg:items-center">
         <div className="fade-in">
-          <h1 className="display name-gradient text-[clamp(3.5rem,11vw,8.5rem)] font-extrabold leading-[0.92]">
-            Muckund
-            <br />
-            Sharma
+          <h1 className="display text-[clamp(3.5rem,11vw,8.5rem)] font-extrabold leading-[0.92]">
+            <span className="name-line">
+              <span className="name-gradient name-rise" style={{ animationDelay: '0.1s' }}>
+                Muckund
+              </span>
+            </span>
+            <span className="name-line">
+              <span className="name-gradient name-rise" style={{ animationDelay: '0.28s' }}>
+                Sharma
+              </span>
+            </span>
           </h1>
-          <div className="mt-8 flex items-center gap-4">
-            <p className="wide text-lg font-semibold text-white sm:text-xl">
+          <div className="mt-8 flex items-center gap-3">
+            <p className="wide -mr-[0.18em] text-lg font-semibold text-white sm:text-xl">
               Mechanical Engineer
             </p>
             {profile.schoolLogo && (
               <>
-                <span className="h-7 w-px bg-white/25" aria-hidden="true" />
                 <img
                   src={img(profile.schoolLogo)}
                   alt={profile.school}
@@ -58,10 +45,6 @@ function Home() {
         <div className="fade-in" style={{ animationDelay: '150ms' }}>
           <p className="display text-3xl font-bold leading-snug text-white sm:text-4xl">
             {profile.tagline}
-          </p>
-          <p className="mt-5 text-lg leading-relaxed text-steel-300">
-            Aerodynamics, structures, and hand-built aircraft. Looking for
-            aerospace and mechanical design co-op opportunities.
           </p>
           <div className="mt-8 flex items-center gap-5 text-steel-300">
             <a
@@ -91,20 +74,6 @@ function Home() {
       </section>
 
       <WingLab />
-
-      <section className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="display text-4xl font-bold text-white md:text-5xl">
-          What I bring
-        </h2>
-        <div className="mt-12 divide-y divide-white/10 border-y border-white/10">
-          {focus.map((f) => (
-            <div key={f.title} className="grid gap-4 py-8 md:grid-cols-[1fr_2fr] md:gap-12">
-              <h3 className="display text-2xl font-bold text-steel-100">{f.title}</h3>
-              <p className="text-[17px] leading-relaxed">{f.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-14">

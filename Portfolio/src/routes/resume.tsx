@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { allEducations, allJobs } from 'content-collections'
 import { Download, FileText, MapPin } from 'lucide-react'
-import { md, profile, skillGroups } from '@/lib/site'
+import { img, md, profile, skillGroups } from '@/lib/site'
 
 export const Route = createFileRoute('/resume')({
   head: () => ({ meta: [{ title: 'Resume | Muckund Sharma' }] }),
@@ -46,6 +46,7 @@ function Resume() {
           <Entry
             key={j._meta.path}
             title={j.jobTitle}
+            logo={j.logo}
             org={j.company}
             place={j.location}
             dates={`${j.startDate} – ${j.endDate ?? 'Present'}`}
@@ -100,6 +101,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Entry({
   title,
+  logo,
   org,
   place,
   dates,
@@ -108,6 +110,7 @@ function Entry({
   list,
 }: {
   title: string
+  logo?: string
   org: string
   place?: string
   dates: string
@@ -119,16 +122,25 @@ function Entry({
     <div className="relative">
       <span className="absolute -left-[37px] top-8 h-2.5 w-2.5 rounded-full bg-sky-400" />
       <article className="rounded-xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
-        <h3 className="display text-2xl font-bold text-white">{title}</h3>
-        <p className="mt-1 flex flex-wrap items-center gap-x-3 text-steel-300">
-          <span className="font-medium text-sky-400">{org}</span>
-          {place && (
-            <span className="inline-flex items-center gap-1 text-sm">
-              <MapPin size={13} /> {place}
-            </span>
+        <div className="flex items-start gap-4">
+          {logo && (
+            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] p-2.5">
+              <img src={img(logo)} alt="" className="max-h-full max-w-full object-contain" />
+            </div>
           )}
-        </p>
-        <p className="mt-1 text-sm text-steel-400">{dates}</p>
+          <div>
+            <h3 className="display text-2xl font-bold text-white">{title}</h3>
+            <p className="mt-1 flex flex-wrap items-center gap-x-3 text-steel-300">
+              <span className="font-medium text-sky-400">{org}</span>
+              {place && (
+                <span className="inline-flex items-center gap-1 text-sm">
+                  <MapPin size={13} /> {place}
+                </span>
+              )}
+            </p>
+            <p className="mt-1 text-sm text-steel-400">{dates}</p>
+          </div>
+        </div>
         {body && (
           <div
             className="bullets mt-5 text-[15px]"

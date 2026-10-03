@@ -7,6 +7,7 @@ const jobs = defineCollection({
   include: '**/*.md',
   schema: z.object({
     jobTitle: z.string(),
+    logo: z.string().optional(),
     company: z.string(),
     location: z.string(),
     startDate: z.string(),

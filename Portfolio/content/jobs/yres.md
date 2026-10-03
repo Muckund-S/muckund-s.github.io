@@ -4,6 +4,7 @@ company: York Region Educational Services (YRES)
 location: Markham, ON
 startDate: May 2026
 endDate: Aug 2026
+logo: logo-yres.png
 order: 1
 tags: ["Mentorship", "Jira", "Project Management"]
 ---
