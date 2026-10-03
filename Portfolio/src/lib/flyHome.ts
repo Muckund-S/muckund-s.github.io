@@ -1,5 +1,5 @@
 /**
- * Click the plane in the header: a small 3D aircraft takes off from the icon,
+ * Click the plane in the header: a small 3D Concorde takes off from the icon,
  * flies a loop away from the viewer and comes back straight at the screen. The
  * page fades to dark as it passes, navigates home underneath, then fades back in.
  * three.js is loaded on demand, so it costs nothing until the plane is clicked.
@@ -73,91 +73,110 @@ export async function flyHome(origin: HTMLElement, navigate: () => void) {
   rim.position.set(-4, 1, -3)
   scene.add(rim)
 
-  // ---- The aircraft (nose along +z) ----
-  const white = new THREE.MeshStandardMaterial({ color: 0xf4f4f2, roughness: 0.55 })
+  // ---- Concorde (nose along +z): ogival delta wing, drooped nose, four engines ----
+  const white = new THREE.MeshStandardMaterial({ color: 0xf6f6f4, roughness: 0.4, metalness: 0.1 })
   const red = new THREE.MeshStandardMaterial({ color: 0xf0452d, roughness: 0.5 })
-  const dark = new THREE.MeshStandardMaterial({ color: 0x1b1f27, roughness: 0.6 })
-  const metal = new THREE.MeshStandardMaterial({ color: 0xb8bcc4, metalness: 0.6, roughness: 0.35 })
+  const dark = new THREE.MeshStandardMaterial({ color: 0x14181f, roughness: 0.5 })
+  const metal = new THREE.MeshStandardMaterial({ color: 0x8f959f, metalness: 0.7, roughness: 0.35 })
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0xff8a3d })
 
   const plane = new THREE.Group()
   const body = new THREE.Group()
   plane.add(body)
 
-  const fus = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.9, 20), white)
-  fus.rotation.x = Math.PI / 2
-  fus.position.z = 0.05
-  body.add(fus)
-  const nose = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.1, 0.22, 20), white)
-  nose.rotation.x = Math.PI / 2
-  nose.position.z = 0.61
-  body.add(nose)
-  const cowl = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.05, 16), red)
-  cowl.rotation.x = Math.PI / 2
-  cowl.position.z = 0.74
-  body.add(cowl)
-  const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.1, 0.8, 16), white)
-  boom.rotation.x = Math.PI / 2
-  boom.position.z = -0.78
-  body.add(boom)
-  const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.1, 0.34), dark)
-  cabin.position.set(0, 0.09, 0.28)
-  body.add(cabin)
+  // Fuselage: long and slender, tapering at the tail
+  const fusFront = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 1.5, 24), white)
+  fusFront.rotation.x = Math.PI / 2
+  fusFront.position.z = 0.0
+  body.add(fusFront)
+  const fusRear = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.042, 0.8, 24), white)
+  fusRear.rotation.x = Math.PI / 2
+  fusRear.position.z = -1.1
+  body.add(fusRear)
 
-  const wing = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.035, 0.36), white)
-  wing.position.set(0, 0.13, 0.12)
+  // Droop nose: pivots down from the front of the fuselage
+  const noseGroup = new THREE.Group()
+  noseGroup.position.set(0, 0, 0.75)
+  noseGroup.rotation.x = 0.2
+  const noseCone = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.75, 24), white)
+  noseCone.rotation.x = Math.PI / 2
+  noseCone.position.z = 0.375
+  noseGroup.add(noseCone)
+  const visor = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.035, 0.18), dark)
+  visor.position.set(0, 0.055, 0.08)
+  noseGroup.add(visor)
+  body.add(noseGroup)
+
+  // Window line along both sides
+  for (const side of [-1, 1]) {
+    const windows = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.018, 1.25), dark)
+    windows.position.set(side * 0.0755, 0.025, 0.0)
+    body.add(windows)
+  }
+
+  // Ogival delta wing
+  const wingShape = new THREE.Shape()
+  wingShape.moveTo(0, 0.55)
+  wingShape.quadraticCurveTo(0.16, 0.0, 0.72, -0.85)
+  wingShape.lineTo(0.72, -1.0)
+  wingShape.lineTo(-0.72, -1.0)
+  wingShape.lineTo(-0.72, -0.85)
+  wingShape.quadraticCurveTo(-0.16, 0.0, 0, 0.55)
+  const wingGeo = new THREE.ExtrudeGeometry(wingShape, { depth: 0.03, bevelEnabled: false })
+  wingGeo.rotateX(Math.PI / 2)
+  const wing = new THREE.Mesh(wingGeo, white)
+  wing.position.y = -0.045
   body.add(wing)
-  const stripe = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.038, 0.09), red)
-  stripe.position.set(0, 0.13, 0.12)
-  body.add(stripe)
-  const strutL = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.28, 0.03), white)
-  strutL.position.set(-0.4, 0.02, 0.12)
-  strutL.rotation.z = -0.5
-  const strutR = strutL.clone()
-  strutR.position.x = 0.4
-  strutR.rotation.z = 0.5
-  body.add(strutL, strutR)
+  const wingTrim = new THREE.Mesh(new THREE.BoxGeometry(1.44, 0.032, 0.03), red)
+  wingTrim.position.set(0, -0.043, -0.99)
+  body.add(wingTrim)
 
-  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.3, 0.22), white)
-  fin.position.set(0, 0.2, -1.1)
-  fin.rotation.x = -0.25
-  body.add(fin)
-  const finTip = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.08, 0.2), red)
-  finTip.position.set(0, 0.36, -1.14)
-  finTip.rotation.x = -0.25
-  body.add(finTip)
-  const stab = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.025, 0.18), white)
-  stab.position.set(0, 0.04, -1.12)
-  body.add(stab)
-  const stabStripe = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.028, 0.05), red)
-  stabStripe.position.set(0, 0.04, -1.12)
-  body.add(stabStripe)
+  // Tall swept fin
+  const finShape = new THREE.Shape()
+  finShape.moveTo(-0.5, 0.06)
+  finShape.lineTo(-1.2, 0.06)
+  finShape.lineTo(-1.25, 0.5)
+  finShape.lineTo(-1.08, 0.5)
+  finShape.closePath()
+  const finGeo = new THREE.ExtrudeGeometry(finShape, { depth: 0.03, bevelEnabled: false })
+  finGeo.rotateY(-Math.PI / 2)
+  finGeo.translate(-0.015, 0, 0)
+  body.add(new THREE.Mesh(finGeo, white))
+  const finTop = new THREE.Mesh(new THREE.BoxGeometry(0.034, 0.1, 0.2), red)
+  finTop.position.set(0, 0.45, -1.165)
+  finTop.rotation.x = -0.08
+  body.add(finTop)
 
-  const gear = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.02, 0.02), dark)
-  gear.position.set(0, -0.14, 0.2)
-  body.add(gear)
-
-  const prop = new THREE.Group()
-  prop.position.z = 0.79
-  const blade = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.7, 0.025), metal)
-  prop.add(blade)
-  const spinner = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.1, 14), red)
-  spinner.rotation.x = Math.PI / 2
-  spinner.position.z = 0.04
-  prop.add(spinner)
-  body.add(prop)
+  // Four engines in two pairs under the wings
+  const glows: import('three').Mesh[] = []
+  for (const side of [-1, 1]) {
+    for (const off of [0.2, 0.31]) {
+      const nacelle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.04, 0.78, 14), metal)
+      nacelle.rotation.x = Math.PI / 2
+      nacelle.position.set(side * off, -0.085, -0.62)
+      body.add(nacelle)
+      const intake = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.06, 0.1), dark)
+      intake.position.set(side * off, -0.085, -0.2)
+      body.add(intake)
+      const glow = new THREE.Mesh(new THREE.SphereGeometry(0.034, 10, 10), glowMat)
+      glow.position.set(side * off, -0.085, -1.02)
+      body.add(glow)
+      glows.push(glow)
+    }
+  }
 
   const light = (color: number, x: number, y: number, z: number) => {
     const m = new THREE.Mesh(
-      new THREE.SphereGeometry(0.045, 12, 12),
+      new THREE.SphereGeometry(0.03, 12, 12),
       new THREE.MeshBasicMaterial({ color }),
     )
     m.position.set(x, y, z)
     body.add(m)
     return m
   }
-  light(0xff3b30, -1.05, 0.13, 0.12)
-  light(0x35e07a, 1.05, 0.13, 0.12)
-  const strobe = light(0xffffff, 0, 0.5, -1.15)
+  light(0xff3b30, -0.72, -0.03, -0.92)
+  light(0x35e07a, 0.72, -0.03, -0.92)
+  const strobe = light(0xffffff, 0, 0.52, -1.2)
 
   scene.add(plane)
 
@@ -230,7 +249,7 @@ export async function flyHome(origin: HTMLElement, navigate: () => void) {
       const m = o as import('three').Mesh
       if (m.geometry) m.geometry.dispose()
     })
-    for (const mat of [white, red, dark, metal]) mat.dispose()
+    for (const mat of [white, red, dark, metal, glowMat]) mat.dispose()
     renderer.dispose()
     renderer.forceContextLoss()
     running = false
@@ -271,8 +290,8 @@ export async function flyHome(origin: HTMLElement, navigate: () => void) {
     plane.up.set(Math.sin(bank), Math.cos(bank), 0)
     ahead.copy(pos).add(tan)
     plane.lookAt(ahead)
-    plane.scale.setScalar(0.14 + (1 - 0.14) * easeOut(clamp(t / 1.4, 0, 1)))
-    prop.rotation.z += 60 * dt
+    plane.scale.setScalar(0.12 + (1.05 - 0.12) * easeOut(clamp(t / 1.4, 0, 1)))
+    for (const g of glows) g.scale.setScalar(0.85 + 0.3 * Math.random())
     strobe.visible = Math.floor(t * 4) % 2 === 0
 
     // Trail follows the tail
