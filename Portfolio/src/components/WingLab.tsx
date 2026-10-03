@@ -2,10 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * Potential-flow demo: a cambered Joukowski airfoil with the Kutta condition.
- * The visitor sets the angle of attack; particles are advected through the exact
- * analytic velocity field. Potential flow has no separation or drag, so this
- * shows streamlines and lift, not stall.
+ * Scroll-driven potential-flow band: a cambered Joukowski airfoil with the Kutta
+ * condition. Air streams across the full width of the page; as the visitor
+ * scrolls through the (pinned) section the angle of attack rises. Particles are
+ * advected through the exact analytic velocity field. Potential flow has no
+ * separation or drag, so this shows streamlines and lift, not stall.
  */
 
 // Circle in the zeta plane that maps to the airfoil under z = zeta + 1/zeta.
@@ -27,8 +28,8 @@ const CHORD =
   Math.max(...outline.map((p) => p[0])) - Math.min(...outline.map((p) => p[0]))
 
 const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, about 2.3°)
-const AOA_MIN = -4
-const AOA_MAX = 16
+const AOA_START = 0
+const AOA_END = 16
 
 // XFLR5 results for the MX-01 wing (Re ~ 100k, 10 m/s lifting-line run).
 const XFLR5 = {
@@ -106,22 +107,12 @@ function velocity(x: number, y: number, a: number): [number, number] | null {
 
 type Particle = { x: number; y: number; px: number; py: number; life: number }
 
-const VIEW_W = 9
-const VIEW_H = 4.4
-
-const PRESETS: [number, string][] = [
-  [0, '0°'],
-  [DESIGN_AOA, '2.26° MX-01'],
-  [4, '4° peak L/D'],
-  [8, '8°'],
-  [15, '15°'],
-]
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 export function WingLab() {
+  const sectionRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const targetRef = useRef(DESIGN_AOA)
-  const redrawRef = useRef<(() => void) | null>(null)
-  const [aoa, setAoa] = useState(DESIGN_AOA)
+  const [aoa, setAoa] = useState(AOA_START)
 
   const cl = liftCoefficient(aoa)
   const xCl = interp(XFLR5.aoa, XFLR5.cl, aoa)
@@ -129,13 +120,9 @@ export function WingLab() {
   const atDesign = Math.abs(aoa - DESIGN_AOA) < 0.35
 
   useEffect(() => {
-    targetRef.current = aoa
-    redrawRef.current?.()
-  }, [aoa])
-
-  useEffect(() => {
+    const section = sectionRef.current
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!section || !canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -143,14 +130,31 @@ export function WingLab() {
     let w = 0
     let h = 0
     let scale = 1
-    let current = targetRef.current
-    let visible = true
+    let cx = 0
+    let cy = 0
+    let worldL = 4
+    let worldR = 4
+    let halfH = 2.5
+    let target = AOA_START
+    let current = AOA_START
+    let shown = AOA_START
+    let visible = false
     let raf = 0
+    let staticTimer = 0
     const particles: Particle[] = []
 
+    // 0 before the section pins, 1 once it is about to scroll away.
+    const readScroll = () => {
+      const rect = section.getBoundingClientRect()
+      const pinTop = (window.innerHeight - canvas.clientHeight) / 2
+      const travel = rect.height - canvas.clientHeight
+      const p = clamp((pinTop - rect.top) / Math.max(1, travel), 0, 1)
+      target = AOA_START + p * (AOA_END - AOA_START)
+    }
+
     const spawn = (p: Particle, anywhere: boolean) => {
-      p.x = anywhere ? (Math.random() - 0.5) * VIEW_W * 1.2 : -VIEW_W * 0.62
-      p.y = (Math.random() - 0.5) * VIEW_H * 1.3
+      p.x = anywhere ? -worldL - 0.4 + Math.random() * (worldL + worldR + 0.8) : -worldL - 0.4
+      p.y = (Math.random() - 0.5) * 2 * (halfH + 0.6)
       p.px = p.x
       p.py = p.y
       p.life = 0
@@ -158,14 +162,19 @@ export function WingLab() {
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const rect = canvas.getBoundingClientRect()
-      w = rect.width
-      h = rect.height
+      w = canvas.clientWidth
+      h = canvas.clientHeight
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      scale = Math.min(w / VIEW_W, h / VIEW_H)
-      const count = w < 640 ? 360 : 700
+      const wide = w >= 1024
+      scale = wide ? Math.min(w / 10, h / 5) : Math.min(w / 6.2, h / 4.6)
+      cx = wide ? w * 0.36 : w / 2
+      cy = wide ? h / 2 : h * 0.27 // on phones the data sits underneath
+      worldL = cx / scale
+      worldR = (w - cx) / scale
+      halfH = Math.max(cy, h - cy) / scale
+      const count = clamp(Math.round((w * h) / 1500), 360, 1300)
       particles.length = 0
       for (let i = 0; i < count; i++) {
         const p = { x: 0, y: 0, px: 0, py: 0, life: 0 }
@@ -175,14 +184,14 @@ export function WingLab() {
     }
 
     const toScreen = (X: number, Y: number): [number, number] => [
-      w / 2 + X * scale,
-      h / 2 - Y * scale,
+      cx + X * scale,
+      cy - Y * scale,
     ]
 
     const speedColor = (q: number) => {
       if (q < 1) {
         const t = Math.max(0, q)
-        return `rgba(${Math.round(40 + 120 * t)},${Math.round(90 + 120 * t)},255,0.75)`
+        return `rgba(${Math.round(40 + 120 * t)},${Math.round(90 + 120 * t)},255,0.7)`
       }
       const t = Math.min(1, (q - 1) / 0.9)
       return `rgba(${Math.round(160 + 90 * t)},${Math.round(210 - 130 * t)},${Math.round(255 - 215 * t)},0.85)`
@@ -209,7 +218,7 @@ export function WingLab() {
         p.x += (u * ca + vv * sa) * dt
         p.y += (-u * sa + vv * ca) * dt
         p.life += dt
-        if (p.x > VIEW_W * 0.62 || Math.abs(p.y) > VIEW_H * 0.8 || p.life > 14) {
+        if (p.x > worldR + 0.6 || Math.abs(p.y) > halfH + 1.5 || p.life > 40) {
           spawn(p, false)
         }
       }
@@ -219,7 +228,7 @@ export function WingLab() {
       const a = (current * Math.PI) / 180
       const ca = Math.cos(a)
       const sa = Math.sin(a)
-      ctx.lineWidth = 1.4
+      ctx.lineWidth = 1.5
       ctx.lineCap = 'round'
       for (const p of particles) {
         if (p.life === 0) continue
@@ -243,15 +252,15 @@ export function WingLab() {
       ctx.beginPath()
       pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
       ctx.closePath()
-      ctx.fillStyle = '#05070b'
+      ctx.fillStyle = 'rgba(5,8,14,0.97)'
       ctx.fill()
-      ctx.lineWidth = 1.8
-      ctx.strokeStyle = 'rgba(238,241,246,0.7)'
+      ctx.lineWidth = 2
+      ctx.strokeStyle = 'rgba(238,241,246,0.8)'
       ctx.stroke()
 
       const c = liftCoefficient(current)
       const [ax, ay] = toScreen(-0.9 * ca, 0.9 * sa)
-      const len = Math.min(Math.max(0, c) * scale * 0.9, h * 0.38)
+      const len = Math.min(Math.max(0, c) * scale * 0.8, h * 0.34)
       if (len > 6) {
         ctx.strokeStyle = '#f0452d'
         ctx.fillStyle = '#f0452d'
@@ -261,7 +270,7 @@ export function WingLab() {
         ctx.lineTo(ax, ay - len)
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(ax, ay - len - 8)
+        ctx.moveTo(ax, ay - len - 9)
         ctx.lineTo(ax - 6, ay - len + 2)
         ctx.lineTo(ax + 6, ay - len + 2)
         ctx.closePath()
@@ -269,163 +278,132 @@ export function WingLab() {
       }
     }
 
+    const syncReadout = () => {
+      const r = Math.round(current * 10) / 10
+      if (r !== shown) {
+        shown = r
+        setAoa(r)
+      }
+    }
+
     const frame = () => {
       raf = requestAnimationFrame(frame)
       if (!visible) return
-      current += (targetRef.current - current) * 0.12
+      readScroll()
+      current += (target - current) * 0.12
       ctx.globalCompositeOperation = 'destination-out'
-      ctx.fillStyle = 'rgba(0,0,0,0.16)'
+      ctx.fillStyle = 'rgba(0,0,0,0.14)'
       ctx.fillRect(0, 0, w, h)
       ctx.globalCompositeOperation = 'source-over'
-      step(0.045)
+      step(0.06)
       drawParticles()
       drawBody()
+      syncReadout()
     }
 
     const renderStatic = () => {
-      current = targetRef.current
+      readScroll()
+      current = target
       ctx.clearRect(0, 0, w, h)
-      for (let i = 0; i < 160; i++) {
-        step(0.05)
+      for (let i = 0; i < 170; i++) {
+        step(0.06)
         drawParticles()
       }
       drawBody()
+      syncReadout()
     }
 
-    resize()
-    if (reduced) {
-      redrawRef.current = renderStatic
-      renderStatic()
-    } else {
-      raf = requestAnimationFrame(frame)
+    const onScroll = () => {
+      if (!reduced) return
+      window.clearTimeout(staticTimer)
+      staticTimer = window.setTimeout(renderStatic, 120)
     }
-
     const onResize = () => {
       resize()
       if (reduced) renderStatic()
     }
+
+    resize()
+    readScroll()
+    current = target
+    if (reduced) renderStatic()
+    else raf = requestAnimationFrame(frame)
+
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting))
-    io.observe(canvas)
+    io.observe(section)
 
     return () => {
       cancelAnimationFrame(raf)
+      window.clearTimeout(staticTimer)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
       io.disconnect()
     }
   }, [])
 
   return (
-    <section className="mx-auto max-w-6xl px-6 pb-8">
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-ink-950/60">
-        <div className="grid lg:grid-cols-[1.7fr_1fr]">
-          <div className="relative border-b border-white/10 lg:border-b-0 lg:border-r">
-            <canvas
-              ref={canvasRef}
-              className="block h-[240px] w-full cursor-ns-resize sm:h-[300px]"
-              onPointerMove={(e) => {
-                if (e.pointerType !== 'mouse') return
-                const r = e.currentTarget.getBoundingClientRect()
-                const f = 1 - (e.clientY - r.top) / r.height
-                setAoa(Math.round((AOA_MIN + f * (AOA_MAX - AOA_MIN)) * 10) / 10)
-              }}
-              aria-label="Airflow around a wing. Move the pointer up and down, or use the slider, to change the angle of attack."
-            />
-            <p className="pointer-events-none absolute left-4 top-3 text-xs text-steel-400">
-              Airflow around a cambered wing. Move your mouse up and down on it.
-            </p>
-            <div className="pointer-events-none absolute bottom-3 right-4 hidden items-center gap-2 text-[11px] text-steel-400 sm:flex">
-              <span>slower</span>
-              <span className="h-1.5 w-20 rounded-full bg-gradient-to-r from-[#2a5aff] via-[#a0d2ff] to-[#fa5028]" />
-              <span>faster air</span>
-            </div>
-          </div>
+    <section ref={sectionRef} className="relative h-[200vh]" aria-label="Airflow around a wing at a rising angle of attack">
+      <div className="sticky top-[10vh] h-[80vh] min-h-[460px] w-full">
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_bottom,transparent,#000_16%,#000_84%,transparent)]"
+        />
 
-          <div className="grid grid-cols-2 content-start gap-x-6 gap-y-4 p-5">
-            <div>
-              <p className="text-xs text-steel-400">Angle of attack</p>
-              <p className="display text-3xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
-            </div>
-            <div>
-              <p className="text-xs text-steel-400">Lift coeff. (idealised)</p>
-              <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
-            </div>
-            <div className="col-span-2 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs text-steel-400">XFLR5, MX-01 wing (0–8° run)</p>
-              <div className="mt-1 flex gap-8">
-                <p className="text-sm text-steel-300">
+        {/* Data sits to the side, no box around it */}
+        <div className="absolute inset-x-0 bottom-[3%] mx-auto flex max-w-6xl justify-center px-6 lg:inset-y-0 lg:bottom-auto lg:items-center lg:justify-end">
+          <div className="w-full max-w-[300px] text-sm">
+            <p className="text-steel-400">Angle of attack</p>
+            <p className="display text-5xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
+
+            <p className="mt-4 text-steel-400">Lift coefficient (idealised)</p>
+            <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
+
+            <div className="mt-5 border-t border-white/15 pt-4">
+              <p className="text-steel-400">XFLR5, MX-01 wing</p>
+              <div className="mt-1 flex gap-7">
+                <p className="text-steel-300">
                   CL{' '}
                   <span className="display text-xl font-bold text-white">
                     {xCl === null ? '–' : xCl.toFixed(2)}
                   </span>
                 </p>
-                <p className="text-sm text-steel-300">
+                <p className="text-steel-300">
                   L/D{' '}
                   <span className="display text-xl font-bold text-white">
                     {xLd === null ? '–' : xLd.toFixed(1)}
                   </span>
                 </p>
               </div>
-              <p className="mt-2 text-[11px] leading-snug text-steel-400">
+              <p className="mt-1 text-xs leading-snug text-steel-400">
                 {xCl === null
-                  ? 'Outside the angles I ran in XFLR5.'
-                  : 'Linearly interpolated between the XFLR5 points.'}
+                  ? 'Outside the 0–8° I ran in XFLR5.'
+                  : 'Interpolated between the XFLR5 points.'}
               </p>
             </div>
+
             <p
-              className={`col-span-2 text-sm leading-snug ${
-                atDesign ? 'text-burn-400' : 'text-steel-400'
-              }`}
+              className={`mt-4 text-xs leading-snug ${atDesign ? 'text-burn-400' : 'text-steel-400'}`}
             >
               {atDesign
                 ? 'MX-01 wing incidence (2.3°). Best simulated L/D in my ANSYS Fluent runs: 13.9.'
-                : 'The idealised model has no drag or stall, so its lift keeps climbing. Real wings stall.'}
+                : 'Idealised flow: no drag or stall, so lift keeps climbing. Real wings stall.'}
+            </p>
+            <p className="mt-3 text-xs text-steel-400">
+              Keep scrolling to pitch the wing up.{' '}
+              <Link
+                to="/projects/$slug"
+                params={{ slug: 'rc-aircraft' }}
+                className="text-sky-400 hover:text-white"
+              >
+                MX-01 write-up →
+              </Link>
             </p>
           </div>
         </div>
-
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 p-4 sm:px-5">
-          <label className="flex min-w-[200px] flex-1 items-center gap-3 text-sm text-steel-300">
-            <span className="shrink-0">Pitch</span>
-            <input
-              type="range"
-              min={AOA_MIN}
-              max={AOA_MAX}
-              step={0.1}
-              value={aoa}
-              onChange={(e) => setAoa(Number(e.target.value))}
-              className="h-2 w-full cursor-pointer accent-sky-400"
-              aria-label="Angle of attack in degrees"
-            />
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {PRESETS.map(([v, label]) => (
-              <button
-                key={label}
-                onClick={() => setAoa(v)}
-                className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                  Math.abs(aoa - v) < 0.05
-                    ? 'border-sky-400 bg-sky-400 font-semibold text-ink-950'
-                    : 'border-white/15 text-steel-100 hover:border-white/40'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
-      <p className="mt-3 text-sm text-steel-400">
-        The real analysis is in the{' '}
-        <Link
-          to="/projects/$slug"
-          params={{ slug: 'rc-aircraft' }}
-          className="text-sky-400 hover:text-white"
-        >
-          MX-01 write-up
-        </Link>
-        .
-      </p>
     </section>
   )
 }

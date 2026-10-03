@@ -122,7 +122,7 @@ function ProjectPage() {
           <img
             src={img(project.image)}
             alt={project.title}
-            className="mt-8 w-full rounded-xl border border-white/10 object-cover"
+            className="mt-8 max-h-[620px] w-full rounded-xl border border-white/10 bg-black/30 object-contain"
           />
         )}
 

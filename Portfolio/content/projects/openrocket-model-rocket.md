@@ -5,6 +5,7 @@ description: A small-scale model rocket optimized in OpenRocket for a 1.5–2.0 
 category: Aerospace
 order: 6
 dates: Sep 2025
+image: rocket-spacez.jpg
 tags: ["OpenRocket", "SolidWorks", "3D Printing", "Flight Simulation"]
 metrics:
   - value: "1.5–2.0"
@@ -24,3 +25,5 @@ I modeled custom 3D-printed fins and a nose cone to hit specific centre-of-mass 
 ## Launch
 
 The rocket was launched and recovered at a predicted apogee of about 300 ft, validating the OpenRocket simulation against post-flight data.
+
+[Watch the launch video (Google Drive)](https://drive.google.com/file/d/1nTGWgT07U01EWIa4QpKZmW_0GviWoGxi/view?usp=sharing)
