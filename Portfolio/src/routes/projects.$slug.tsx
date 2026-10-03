@@ -16,6 +16,27 @@ export const Route = createFileRoute('/projects/$slug')({
 })
 
 function Media({ project }: { project: (typeof allProjects)[number] }) {
+  if (project.videos) {
+    return (
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        {project.videos.map((v) => (
+          <figure key={v.youtube}>
+            <div className="aspect-video overflow-hidden rounded-xl border border-white/10">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${v.youtube}`}
+                title={v.title}
+                loading="lazy"
+                allow="accelerometer; encrypted-media; picture-in-picture"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            </div>
+            <figcaption className="mt-2 text-sm text-steel-400">{v.title}</figcaption>
+          </figure>
+        ))}
+      </div>
+    )
+  }
   if (project.youtube) {
     return (
       <div className="mt-8 aspect-video overflow-hidden rounded-xl border border-white/10">
