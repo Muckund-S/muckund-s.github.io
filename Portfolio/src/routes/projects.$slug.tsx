@@ -1,6 +1,8 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { allProjects } from 'content-collections'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, X } from 'lucide-react'
+import { VideoEmbed } from '@/components/VideoEmbed'
 import { img, md } from '@/lib/site'
 
 export const Route = createFileRoute('/projects/$slug')({
@@ -20,33 +22,15 @@ function Media({ project }: { project: (typeof allProjects)[number] }) {
     return (
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {project.videos.map((v) => (
-          <figure key={v.youtube}>
-            <div className="aspect-video overflow-hidden rounded-xl border border-white/10">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${v.youtube}`}
-                title={v.title}
-                loading="lazy"
-                allow="accelerometer; encrypted-media; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            </div>
-            <figcaption className="mt-2 text-sm text-steel-400">{v.title}</figcaption>
-          </figure>
+          <VideoEmbed key={v.youtube} id={v.youtube} title={v.title} />
         ))}
       </div>
     )
   }
   if (project.youtube) {
     return (
-      <div className="mt-8 aspect-video overflow-hidden rounded-xl border border-white/10">
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${project.youtube}`}
-          title={`${project.title} video`}
-          allow="accelerometer; encrypted-media; picture-in-picture"
-          allowFullScreen
-          className="h-full w-full"
-        />
+      <div className="mt-8">
+        <VideoEmbed id={project.youtube} title={`${project.title} video`} />
       </div>
     )
   }
@@ -66,6 +50,18 @@ function Media({ project }: { project: (typeof allProjects)[number] }) {
 
 function ProjectPage() {
   const project = Route.useLoaderData()
+  const [zoom, setZoom] = useState<{ src: string; alt: string } | null>(null)
+
+  useEffect(() => {
+    if (!zoom) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setZoom(null)
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [zoom])
   const hasPAR = project.problem && project.approach && project.result
 
   return (
@@ -87,7 +83,16 @@ function ProjectPage() {
         <p className="mt-3 text-lg text-steel-300">{project.dates}</p>
       </header>
 
-      <article className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
+      <article
+        className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-10 [&_img]:cursor-zoom-in"
+        onClick={(e) => {
+          const t = e.target as HTMLElement
+          if (t.tagName === 'IMG' && !t.closest('[data-nozoom]')) {
+            const img = t as HTMLImageElement
+            setZoom({ src: img.currentSrc || img.src, alt: img.alt })
+          }
+        }}
+      >
         <div className="flex flex-wrap gap-2">
           {project.tags.map((t) => (
             <span key={t} className="rounded-full bg-white/[0.08] px-3.5 py-1.5 text-sm text-steel-100">
@@ -163,6 +168,29 @@ function ProjectPage() {
           </div>
         )}
       </article>
+
+      {zoom && (
+        <div
+          className="fixed inset-0 z-[70] grid place-items-center bg-black/90 p-4"
+          onClick={() => setZoom(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={zoom.alt || 'Enlarged image'}
+        >
+          <button
+            className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/60 text-white hover:bg-white hover:text-black"
+            aria-label="Close"
+            onClick={() => setZoom(null)}
+          >
+            <X size={18} />
+          </button>
+          <img
+            src={zoom.src}
+            alt={zoom.alt}
+            className="max-h-[92vh] max-w-full cursor-zoom-out rounded-lg bg-white object-contain"
+          />
+        </div>
+      )}
     </div>
   )
 }

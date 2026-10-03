@@ -8,7 +8,7 @@ featured: true
 dates: Aug 2026 – Present
 image: rc-preflight.jpg
 videos:
-  - youtube: oaQr4G5Oavw
+  - youtube: xT8dXaTI_v8
     title: MX-01 controls test
   - youtube: dkwkGfQDkbQ
     title: MX-01 maiden test flight
