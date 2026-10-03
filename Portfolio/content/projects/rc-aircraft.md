@@ -1,8 +1,13 @@
 ---
 dates: Aug 2026 – Present
-title: RC Aircraft Design, CFD & Fabrication
-subtitle: Cessna 172-Inspired RC Aircraft
-description: A complete RC aircraft designed in SolidWorks, analyzed with 3D CFD in ANSYS Fluent, and hand-built and flight-tested.
+videos:
+  - youtube: oaQr4G5Oavw
+    title: MX-01 controls test
+  - youtube: dkwkGfQDkbQ
+    title: MX-01 maiden test flight
+title: "MX-01 RC Aircraft: Design, CFD & Fabrication"
+subtitle: MX-01, a Cessna 172-inspired RC aircraft
+description: MX-01, a complete RC aircraft designed in SolidWorks, analyzed with 3D CFD in ANSYS Fluent, and hand-built and flight-tested.
 category: Aerospace
 order: 1
 featured: true
@@ -45,7 +50,7 @@ tags: ["SolidWorks", "ANSYS Fluent", "CFD", "Brushless Motors", "RC Systems"]
 
 ## Design and fabrication
 
-I designed a Cessna 172-inspired RC aircraft end to end. The airframe and its engineering drawings were developed in SolidWorks, and the CAD was then translated into a hand-built, functional prototype. The goal was an aircraft that balances aerodynamic efficiency, structural integrity, and manufacturability, without adding structural complexity that the wing does not need.
+I designed MX-01, a Cessna 172-inspired RC aircraft, end to end. The airframe and its engineering drawings were developed in SolidWorks, and the CAD was then translated into a hand-built, functional prototype. The goal was an aircraft that balances aerodynamic efficiency, structural integrity, and manufacturability, without adding structural complexity that the wing does not need.
 
 ## CFD analysis
 
@@ -56,6 +61,10 @@ Comparing L/D trends across the sweep, I selected a **2.26° wing incidence** as
 ## Propulsion and flight control
 
 I selected, wired, and commissioned the full propulsion and control system: a 1400-kV brushless motor, a 30-A ESC, propeller, servos, receiver, and control surfaces.
+
+## Controls test and maiden flight
+
+The videos at the top of this page show MX-01's controls test and its maiden test flight.
 
 ## Result
 

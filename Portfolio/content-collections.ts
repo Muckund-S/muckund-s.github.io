@@ -47,6 +47,7 @@ const projects = defineCollection({
     dates: z.string(),
     video: z.string().optional(),
     youtube: z.string().optional(),
+    videos: z.array(z.object({ youtube: z.string(), title: z.string() })).optional(),
     gallery: z.array(z.object({ file: z.string(), caption: z.string() })).optional(),
     problem: z.array(z.string()).optional(),
     approach: z.array(z.string()).optional(),

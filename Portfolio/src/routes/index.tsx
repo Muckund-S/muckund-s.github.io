@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { allProjects } from 'content-collections'
 import { Linkedin, Mail } from 'lucide-react'
 import { ProjectCard } from '@/components/ProjectCard'
+import { WingLab } from '@/components/WingLab'
 import { img, profile } from '@/lib/site'
 
 export const Route = createFileRoute('/')({
@@ -11,7 +12,7 @@ export const Route = createFileRoute('/')({
 const focus = [
   {
     title: 'Aerodynamics & CFD',
-    body: 'Ran 3D CFD in ANSYS Fluent across five angles of attack to pick a wing incidence for my RC aircraft: 2.26° gave a maximum simulated L/D of 13.9 (CL 1.294, CD 0.0932). I read pressure, velocity, turbulence and wall-shear fields to explain where the lift and drag come from, then built and flew the aircraft.',
+    body: 'Ran 3D CFD in ANSYS Fluent across five angles of attack to pick the wing incidence for my RC aircraft, MX-01: 2.26° gave a maximum simulated L/D of 13.9 (CL 1.294, CD 0.0932). I read pressure, velocity, turbulence and wall-shear fields to explain where the lift and drag come from, then built and flew the aircraft.',
   },
   {
     title: 'Structures & FEA',
@@ -22,8 +23,8 @@ const focus = [
     body: 'Compression-tested six fiberglass laminates for the Polaris airframe to ASTM D695 / DIN EN 2850 on a 15 kN system, machined the Boeing BSS 7260 fixture on the mill and lathe, and wrote the Python pipeline that turned raw load data into stress-strain curves.',
   },
   {
-    title: 'Delivery & Leadership',
-    body: 'Coordinated a large annual volunteer event in Jira with task ownership and live status, mentored and evaluated six summer staff at YRES, and co-founded a 250+ member Science Club and a food-security non-profit that supported 100+ families.',
+    title: 'Delivery & Teamwork',
+    body: 'Built a Jira workspace for a large annual volunteer event so every task had an owner and live status, mentored and evaluated six summer program staff at YRES, and coordinated procurement research across 20+ composite suppliers for Waterloo Rocketry.',
   },
 ]
 
@@ -53,7 +54,7 @@ function Home() {
             I'm a Mechanical Engineering student at the University of Waterloo
             focused on aerospace: aerodynamics, structures, and the
             manufacturing that takes a design off the screen and into the air.
-            I've flight-tested an RC aircraft whose wing I selected with CFD,
+            I've flight-tested MX-01, an RC aircraft whose wing I selected with CFD,
             validated a landing-gear bracket with FEA, and run composite
             compression testing for Waterloo Rocketry.
           </p>
@@ -87,7 +88,9 @@ function Home() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-4 px-6 sm:grid-cols-2">
+      <WingLab />
+
+      <section className="mx-auto grid max-w-6xl gap-4 px-6 pt-8 sm:grid-cols-2">
         {[
           ['rc-flight.jpg', 'Flight test of the finished RC aircraft'],
           ['rc-cfd.jpg', 'Turbulence kinetic energy around the wing section (ANSYS Fluent)'],

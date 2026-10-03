@@ -19,7 +19,7 @@ function Resume() {
           Experience
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg">
-          Design team work, research-style testing, and student leadership,
+          Design team work, materials testing, and project coordination,
           alongside a mechanical engineering degree at Waterloo.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
