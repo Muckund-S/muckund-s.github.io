@@ -6,7 +6,7 @@ category: Aerospace
 order: 1
 featured: true
 dates: Aug 2026 – Present
-image: rc-livery.jpg
+image: rc-preflight.jpg
 videos:
   - youtube: xT8dXaTI_v8
     title: MX-01 controls test
@@ -31,8 +31,8 @@ tags: ["SolidWorks", "XFoil", "XFLR5", "ANSYS Fluent", "CFD", "EPS Foam", "RC Sy
 I took this aircraft from requirements to flight on my own: CAD, airfoil selection, 2D and 3D aerodynamic analysis, fabrication, and iterative flight testing. The main constraint was low Reynolds number (Re ≈ 100k), where airfoil performance degrades and small design choices matter.
 
 <figure>
-<img src="/img/rc-preflight.jpg" alt="Pre-flight with the finished MX-01" loading="lazy" />
-<figcaption>Pre-flight with the finished MX-01.</figcaption>
+<img src="/img/rc-livery.jpg" alt="MX-01 on a table, with its red and white livery and navigation lights on" loading="lazy" />
+<figcaption>MX-01 with its livery.</figcaption>
 </figure>
 
 ## Specifications
