@@ -14,22 +14,63 @@ export const profile = {
 
 export const skillGroups = [
   {
-    title: 'CAD & Simulation',
-    items: ['SolidWorks (CSWA Certified)', 'AutoCAD', 'Ansys Mechanical/Fluent', 'CATIA', 'FEA', 'CFD'],
+    title: 'CAD, Simulation & Analysis',
+    items: [
+      'SolidWorks (CSWA Certified)',
+      'AutoCAD (4+ years)',
+      'CATIA 3DEXPERIENCE (Mechanical Designer Certified)',
+      'ANSYS Mechanical / Fluent',
+      'FEA',
+      'CFD',
+      'GD&T',
+      'DFM / DFA',
+      'Tolerance Analysis',
+      '2D Manufacturing Drawings',
+      'DXF Generation',
+    ],
   },
-  { title: 'Programming & Data', items: ['Python', 'MATLAB', 'C++', 'Java', 'Git'] },
   {
     title: 'Manufacturing & Fabrication',
-    items: ['CNC Machining', 'Milling', 'Lathe', '3D Printing', 'Laser Cutting', 'GD&T', 'Soldering'],
+    items: [
+      'CNC Machining (Milling, Lathe)',
+      'CNC Waterjet',
+      'Manual Milling & Lathe',
+      'Laser Cutting',
+      '3D Printing (FDM)',
+      'Horizontal Bandsaw',
+      'Composite Layup (Vacuum Infusion)',
+      'Mechanical Assembly',
+      'Soldering',
+      'Precision Measurement',
+    ],
+  },
+  {
+    title: 'Programming & Software',
+    items: ['Python', 'MATLAB (Onramp Certified)', 'C++', 'Microsoft Excel, Word, PowerPoint'],
   },
   {
     title: 'Electronics',
-    items: ['Arduino', 'RC Systems', 'Brushless Motors/ESCs', 'Servos'],
+    items: ['Arduino', 'RC Systems', 'Brushless Motors / ESCs', 'Servos'],
+  },
+  {
+    title: 'Project Management & Documentation',
+    items: [
+      'Procurement Coordination',
+      'Stakeholder Communication',
+      'Jira',
+      'Construction Drawing / Spec Interpretation',
+      'Formwork Design',
+      'Rebar Detailing',
+    ],
+  },
+  {
+    title: 'Languages',
+    items: ['English (Fluent)', 'French (Intermediate, DELF B1 Certified)'],
   },
 ]
 
 /** Path to a file in /public/img. */
-export function img(file: string, _width?: number) {
+export function img(file: string) {
   return `/img/${file}`
 }
 

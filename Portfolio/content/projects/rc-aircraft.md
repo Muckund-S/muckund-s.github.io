@@ -1,4 +1,5 @@
 ---
+dates: Aug 2026 – Present
 title: RC Aircraft Design, CFD & Fabrication
 subtitle: Cessna 172-Inspired RC Aircraft
 description: A complete RC aircraft designed in SolidWorks, analyzed with 3D CFD in ANSYS Fluent, and hand-built and flight-tested.
@@ -7,14 +8,20 @@ order: 1
 featured: true
 image: rc-aircraft.jpg
 gallery:
+  - file: rc-preflight.jpg
+    caption: Pre-flight with the finished aircraft
+  - file: rc-flight.jpg
+    caption: Flight test
   - file: rc-drawing.jpg
     caption: Engineering drawings of the airframe (SolidWorks)
+  - file: rc-fuselage-build.jpg
+    caption: Fuselage structure during fabrication
+  - file: rc-fuselage-electronics.jpg
+    caption: Battery, ESC and wiring installed in the fuselage
+  - file: rc-cfd.jpg
+    caption: Turbulence kinetic energy contour around the wing section (ANSYS Fluent)
   - file: rc-ld-plot.jpg
     caption: CL, CD and L/D versus angle of attack
-  - file: rc-cfd.jpg
-    caption: Turbulence kinetic energy contour around the wing (ANSYS Fluent)
-  - file: rc-flight.jpg
-    caption: Flight test of the finished aircraft
 problem:
   - Design and build a lightweight Cessna 172-inspired RC aircraft balancing aerodynamic efficiency, structural integrity, and manufacturability.
   - Determine a wing operating condition that maximizes aerodynamic efficiency without introducing unnecessary structural complexity.
@@ -36,6 +43,20 @@ metrics:
 tags: ["SolidWorks", "ANSYS Fluent", "CFD", "Brushless Motors", "RC Systems"]
 ---
 
-- Designed and fabricated a complete Cessna 172-inspired RC aircraft, from engineering drawings in SolidWorks to a hand-built functional prototype.
-- Ran 3D CFD on the wing geometry in ANSYS Fluent and used the results to select a 2.26° wing incidence.
-- Integrated a 1400-kV brushless motor, 30-A ESC, propeller, servos, receiver, and control surfaces into the airframe.
+## Design and fabrication
+
+I designed a Cessna 172-inspired RC aircraft end to end. The airframe and its engineering drawings were developed in SolidWorks, and the CAD was then translated into a hand-built, functional prototype. The goal was an aircraft that balances aerodynamic efficiency, structural integrity, and manufacturability, without adding structural complexity that the wing does not need.
+
+## CFD analysis
+
+I ran 3D CFD on the wing geometry in ANSYS Fluent across five angles of attack and extracted the lift and drag forces to calculate CL, CD, and L/D at each condition. Pressure, velocity, turbulence, and wall-shear distributions were used to understand where the lift and drag come from, not just how large they are.
+
+Comparing L/D trends across the sweep, I selected a **2.26° wing incidence** as the design point. It gave a peak simulated **L/D of 13.9** (CL = 1.294, CD = 0.0932). Higher angles of attack produced a disproportionate rise in drag for limited lift gain, which is what supported the selection.
+
+## Propulsion and flight control
+
+I selected, wired, and commissioned the full propulsion and control system: a 1400-kV brushless motor, a 30-A ESC, propeller, servos, receiver, and control surfaces.
+
+## Result
+
+The aircraft was built, integrated, and flight-tested. The flight validated the airframe structure, the propulsion integration, and the CFD-informed wing design under real flight conditions.

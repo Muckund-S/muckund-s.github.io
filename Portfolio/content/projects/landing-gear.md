@@ -1,4 +1,5 @@
 ---
+dates: Sep 2026 – Present
 title: Pegasus 1 Landing Gear & FEA
 subtitle: Waterloo Aerial Robotics Group
 description: A lightweight carbon-fiber landing gear with an intentional breakaway section, validated with orthotropic linear-static FEA.
@@ -30,5 +31,18 @@ metrics:
 tags: ["SolidWorks", "FEA", "Carbon Fiber", "3D Printing", "Design for Failure"]
 ---
 
-- Designed a lightweight landing gear with an intentional breakaway section to protect the airframe in hard crashes.
-- Validated the bracket with orthotropic linear-static FEA under 1-4g loading.
+## Design
+
+The Pegasus 1 landing gear uses 22 mm OD carbon-fiber tubes and a 3D-printed PETG-CF bracket. The bracket includes an intentional breakaway section with an hourglass neck, so that in a hard crash the sacrificial joint fails before the primary airframe or carbon-fiber tubes are overloaded.
+
+## FEA validation
+
+I modeled the bracket in isolation and ran orthotropic linear-static FEA under a 1–4g load sweep (4g = 196.2 N). At 1g normal landing loads the bracket has a **3.81 factor of safety**. At 4g the analysis predicts tensile-failure onset at the hourglass neck, which is the intended sacrificial failure.
+
+## Mesh convergence
+
+I refined the mesh around the bolt interfaces and the breakaway region. Peak maximum principal stress moved from 37.33 to 37.79 MPa, a change of only **1.22%**, which confirms the result is mesh-converged.
+
+## Related work
+
+I also designed a 3D-printable protective enclosure for an APD 120F3 ESC, with M3 mounting interfaces, component clearances, passive ventilation, and terminal protection.

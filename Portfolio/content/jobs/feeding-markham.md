@@ -1,5 +1,5 @@
 ---
-jobTitle: President & Co-Founder
+jobTitle: Co-President & Co-Founder
 company: Feeding Markham
 location: Markham, ON
 startDate: Sep 2024
@@ -8,6 +8,5 @@ order: 4
 tags: ["Non-Profit", "Operations", "Community Partnerships"]
 ---
 
-- Co-founded a student-led not-for-profit addressing local food insecurity.
-- Coordinated donation efforts supporting 100+ families during peak demand periods.
-- Worked with community partners to make food distribution more efficient.
+- Established a student-led non-profit addressing food insecurity in Markham, managing logistics coordination that supported 100+ families during peak demand periods.
+- Partnered with two community organizations to streamline donation intake, increasing donation volume by 120%.

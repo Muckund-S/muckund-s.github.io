@@ -13,7 +13,12 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
-      prerender: { enabled: true, crawlLinks: true },
+      // Skip links to static files (e.g. the resume PDF) so they are copied as-is, not re-rendered.
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+        filter: (page) => !/\.[a-z0-9]+$/i.test(page.path),
+      },
     }),
     viteReact(),
   ],

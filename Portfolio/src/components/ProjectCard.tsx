@@ -1,35 +1,32 @@
+import { Link } from '@tanstack/react-router'
 import type { Project } from 'content-collections'
 import { img } from '@/lib/site'
 
-export function ProjectCard({
-  project,
-  onOpen,
-}: {
-  project: Project
-  onOpen: (p: Project) => void
-}) {
+export function ProjectCard({ project }: { project: Project }) {
   return (
-    <button
-      onClick={() => onOpen(project)}
+    <Link
+      to="/projects/$slug"
+      params={{ slug: project._meta.path }}
       className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] text-left transition-colors hover:border-white/25 hover:bg-white/[0.05]"
     >
-      <div className="aspect-[16/10] overflow-hidden bg-ink-800">
-        <img
-          src={img(project.image, 900)}
-          alt={`${project.title}: ${project.subtitle}`}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-      </div>
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="display text-xl font-bold leading-tight text-steel-100">
-            {project.title}
-          </h3>
-          <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs text-steel-100">
-            {project.category}
-          </span>
+      {project.image && (
+        <div className="aspect-[16/10] overflow-hidden bg-ink-800">
+          <img
+            src={img(project.image)}
+            alt={`${project.title}: ${project.subtitle}`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
         </div>
+      )}
+      <div className="flex flex-1 flex-col p-6">
+        <span className="w-fit rounded-full bg-white/10 px-2.5 py-1 text-xs text-steel-100">
+          {project.category}
+        </span>
+        <h3 className="display mt-3 text-xl font-bold leading-tight text-steel-100">
+          {project.title}
+        </h3>
+        <p className="mt-1 text-sm text-steel-400">{project.dates}</p>
         <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed">
           {project.description}
         </p>
@@ -44,6 +41,6 @@ export function ProjectCard({
           View details →
         </span>
       </div>
-    </button>
+    </Link>
   )
 }
