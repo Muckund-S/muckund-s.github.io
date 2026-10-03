@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
- * Interactive potential-flow demo: a cambered Joukowski airfoil with the Kutta
- * condition. The user sets the angle of attack; particles are advected through
- * the exact analytic velocity field. Potential flow has no separation or drag,
- * so this shows streamlines and lift, not stall.
+ * Full-page potential-flow backdrop: a cambered Joukowski airfoil with the Kutta
+ * condition. Scroll position sets the angle of attack; particles are advected
+ * through the exact analytic velocity field. Potential flow has no separation
+ * or drag, so this shows streamlines and lift, not stall.
  */
 
 // Circle in the zeta plane that maps to the airfoil under z = zeta + 1/zeta.
@@ -27,8 +27,8 @@ const CHORD =
   Math.max(...outline.map((p) => p[0])) - Math.min(...outline.map((p) => p[0]))
 
 const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, about 2.3°)
-const AOA_MIN = -4
-const AOA_MAX = 16
+const AOA_START = 0 // top of the page
+const AOA_END = 16 // bottom of the page
 
 /** Lift coefficient from the Kutta-Joukowski theorem (U = 1). */
 function liftCoefficient(aoaDeg: number) {
@@ -88,19 +88,13 @@ function velocity(x: number, y: number, a: number): [number, number] | null {
 
 type Particle = { x: number; y: number; px: number; py: number; life: number }
 
-const VIEW_W = 9
-const VIEW_H = 4.4
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
-export function WingLab() {
+export function WingBackdrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const targetRef = useRef(DESIGN_AOA)
-  const redrawRef = useRef<(() => void) | null>(null)
-  const [aoa, setAoa] = useState(DESIGN_AOA)
-  const cl = liftCoefficient(aoa)
-
-  useEffect(() => {
-    targetRef.current = aoa
-  }, [aoa])
+  const aoaRef = useRef<HTMLSpanElement>(null)
+  const clRef = useRef<HTMLSpanElement>(null)
+  const markerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -112,14 +106,26 @@ export function WingLab() {
     let w = 0
     let h = 0
     let scale = 1
-    let current = targetRef.current
+    let cx = 0
+    let cy = 0
+    let worldL = 4
+    let worldR = 4
+    let halfH = 3
+    let target = AOA_START
+    let current = AOA_START
     let visible = true
     let raf = 0
     const particles: Particle[] = []
 
+    const readScroll = () => {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+      const p = clamp(window.scrollY / max, 0, 1)
+      target = AOA_START + p * (AOA_END - AOA_START)
+    }
+
     const spawn = (p: Particle, anywhere: boolean) => {
-      p.x = anywhere ? (Math.random() - 0.5) * VIEW_W * 1.2 : -VIEW_W * 0.62
-      p.y = (Math.random() - 0.5) * VIEW_H * 1.3
+      p.x = anywhere ? -worldL - 0.4 + Math.random() * (worldL + worldR + 0.8) : -worldL - 0.4
+      p.y = (Math.random() - 0.5) * 2 * (halfH + 0.6)
       p.px = p.x
       p.py = p.y
       p.life = 0
@@ -127,14 +133,20 @@ export function WingLab() {
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const rect = canvas.getBoundingClientRect()
-      w = rect.width
-      h = rect.height
+      w = window.innerWidth
+      h = window.innerHeight
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      scale = Math.min(w / VIEW_W, h / VIEW_H)
-      const count = w < 640 ? 380 : 800
+      const wide = w >= 1024
+      // On wide screens the wing sits in the right-hand column, clear of the text.
+      scale = wide ? Math.min(w / 10, h / 5) : Math.min(w / 6.2, h / 4.6)
+      cx = wide ? w * 0.74 : w / 2
+      cy = h / 2
+      worldL = cx / scale
+      worldR = (w - cx) / scale
+      halfH = h / 2 / scale
+      const count = clamp(Math.round((w * h) / 1900), 320, 1200)
       particles.length = 0
       for (let i = 0; i < count; i++) {
         const p = { x: 0, y: 0, px: 0, py: 0, life: 0 }
@@ -144,15 +156,15 @@ export function WingLab() {
     }
 
     const toScreen = (X: number, Y: number): [number, number] => [
-      w / 2 + X * scale,
-      h / 2 - Y * scale,
+      cx + X * scale,
+      cy - Y * scale,
     ]
 
     const speedColor = (q: number) => {
       // slow = deep blue, free-stream = light blue, fast = warm orange/red
       if (q < 1) {
         const t = Math.max(0, q)
-        return `rgba(${Math.round(40 + 120 * t)},${Math.round(90 + 120 * t)},255,0.75)`
+        return `rgba(${Math.round(40 + 120 * t)},${Math.round(90 + 120 * t)},255,0.7)`
       }
       const t = Math.min(1, (q - 1) / 0.9)
       return `rgba(${Math.round(160 + 90 * t)},${Math.round(210 - 130 * t)},${Math.round(255 - 215 * t)},0.85)`
@@ -180,16 +192,10 @@ export function WingLab() {
           vv = (vv / sp) * 4
         }
         // body frame -> flow frame
-        const ux = u * ca + vv * sa
-        const uy = -u * sa + vv * ca
-        p.x += ux * dt
-        p.y += uy * dt
+        p.x += (u * ca + vv * sa) * dt
+        p.y += (-u * sa + vv * ca) * dt
         p.life += dt
-        if (
-          p.x > VIEW_W * 0.62 ||
-          Math.abs(p.y) > VIEW_H * 0.8 ||
-          p.life > 14
-        ) {
+        if (p.x > worldR + 0.6 || Math.abs(p.y) > halfH + 1.5 || p.life > 40) {
           spawn(p, false)
         }
       }
@@ -199,13 +205,11 @@ export function WingLab() {
       const a = (current * Math.PI) / 180
       const ca = Math.cos(a)
       const sa = Math.sin(a)
-      ctx.lineWidth = 1.4
+      ctx.lineWidth = 1.5
       ctx.lineCap = 'round'
       for (const p of particles) {
         if (p.life === 0) continue
-        const bx = p.x * ca - p.y * sa
-        const by = p.x * sa + p.y * ca
-        const v = velocity(bx, by, a)
+        const v = velocity(p.x * ca - p.y * sa, p.x * sa + p.y * ca, a)
         const q = v ? Math.hypot(v[0], v[1]) : 1
         const [x0, y0] = toScreen(p.px, p.py)
         const [x1, y1] = toScreen(p.x, p.y)
@@ -226,16 +230,16 @@ export function WingLab() {
       ctx.beginPath()
       pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
       ctx.closePath()
-      ctx.fillStyle = '#05070b'
+      ctx.fillStyle = 'rgba(6,10,18,0.96)'
       ctx.fill()
-      ctx.lineWidth = 1.5
-      ctx.strokeStyle = 'rgba(238,241,246,0.55)'
+      ctx.lineWidth = 2
+      ctx.strokeStyle = 'rgba(238,241,246,0.8)'
       ctx.stroke()
 
       // lift arrow, perpendicular to the free stream
       const c = liftCoefficient(current)
       const [ax, ay] = toScreen(-0.9 * ca, 0.9 * sa)
-      const len = Math.min(Math.max(0, c) * scale * 0.9, h * 0.38)
+      const len = Math.min(Math.max(0, c) * scale * 0.7, h * 0.3)
       if (len > 6) {
         ctx.strokeStyle = '#f0452d'
         ctx.fillStyle = '#f0452d'
@@ -245,155 +249,151 @@ export function WingLab() {
         ctx.lineTo(ax, ay - len)
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(ax, ay - len - 8)
+        ctx.moveTo(ax, ay - len - 9)
         ctx.lineTo(ax - 6, ay - len + 2)
         ctx.lineTo(ax + 6, ay - len + 2)
         ctx.closePath()
         ctx.fill()
-        ctx.font = '600 12px Hanken Grotesk, system-ui, sans-serif'
-        ctx.fillText('Lift', ax + 10, ay - len + 4)
+      }
+    }
+
+    const updateHud = () => {
+      if (aoaRef.current) aoaRef.current.textContent = `${current.toFixed(1)}°`
+      if (clRef.current) clRef.current.textContent = liftCoefficient(current).toFixed(2)
+      if (markerRef.current) {
+        const f = (current - AOA_START) / (AOA_END - AOA_START)
+        markerRef.current.style.top = `${clamp(f, 0, 1) * 100}%`
       }
     }
 
     const frame = () => {
       raf = requestAnimationFrame(frame)
       if (!visible) return
-      current += (targetRef.current - current) * 0.12
+      current += (target - current) * 0.1
       ctx.globalCompositeOperation = 'destination-out'
-      ctx.fillStyle = 'rgba(0,0,0,0.16)'
+      ctx.fillStyle = 'rgba(0,0,0,0.14)'
       ctx.fillRect(0, 0, w, h)
       ctx.globalCompositeOperation = 'source-over'
-      step(0.045)
+      step(0.06)
       drawParticles()
-      // redraw body on a clean layer each frame so it never smears
       drawBody()
+      updateHud()
     }
 
+    let staticTimer = 0
     const renderStatic = () => {
+      current = target
       ctx.clearRect(0, 0, w, h)
       for (let i = 0; i < 160; i++) {
-        step(0.05)
+        step(0.06)
         drawParticles()
       }
       drawBody()
+      updateHud()
+    }
+
+    const onScroll = () => {
+      readScroll()
+      if (reduced) {
+        window.clearTimeout(staticTimer)
+        staticTimer = window.setTimeout(renderStatic, 120)
+      }
+    }
+    const onResize = () => {
+      resize()
+      readScroll()
+      if (reduced) renderStatic()
     }
 
     resize()
+    readScroll()
+    current = target
     if (reduced) {
-      redrawRef.current = () => {
-        current = targetRef.current
-        renderStatic()
-      }
       renderStatic()
     } else {
       raf = requestAnimationFrame(frame)
     }
 
-    const onResize = () => {
-      resize()
-      if (reduced) renderStatic()
-    }
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting))
-    io.observe(canvas)
+    const onVis = () => (visible = !document.hidden)
+    document.addEventListener('visibilitychange', onVis)
 
     return () => {
       cancelAnimationFrame(raf)
+      window.clearTimeout(staticTimer)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
-      io.disconnect()
+      document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
 
-  // Reduced-motion mode shows a still image, so redraw it when the angle changes.
-  useEffect(() => {
-    redrawRef.current?.()
-  }, [aoa])
+  const designPos = ((DESIGN_AOA - AOA_START) / (AOA_END - AOA_START)) * 100
 
   return (
-    <section className="mx-auto max-w-6xl px-6 pb-8">
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-ink-950/60">
-        <div className="relative">
-          <canvas
-            ref={canvasRef}
-            className="block h-[300px] w-full cursor-ns-resize sm:h-[420px]"
-            onPointerMove={(e) => {
-              if (e.pointerType !== 'mouse') return
-              const r = e.currentTarget.getBoundingClientRect()
-              const f = 1 - (e.clientY - r.top) / r.height
-              setAoa(
-                Math.round((AOA_MIN + f * (AOA_MAX - AOA_MIN)) * 10) / 10,
-              )
-            }}
-            aria-label="Airflow around a wing. Move the pointer up and down, or use the slider, to change the angle of attack."
-          />
-          <div className="pointer-events-none absolute left-5 top-5">
-            <p className="text-sm text-steel-400">Angle of attack</p>
-            <p className="display text-4xl font-extrabold text-white">
-              {aoa.toFixed(1)}°
-            </p>
-            <p className="mt-3 text-sm text-steel-400">Lift coefficient</p>
-            <p className="display text-3xl font-bold text-sky-400">
-              {cl.toFixed(2)}
-            </p>
-          </div>
-          <div className="pointer-events-none absolute bottom-4 right-5 hidden items-center gap-2 text-xs text-steel-400 sm:flex">
-            <span>slower</span>
-            <span className="h-2 w-28 rounded-full bg-gradient-to-r from-[#2a5aff] via-[#a0d2ff] to-[#fa5028]" />
-            <span>faster air</span>
-          </div>
-        </div>
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 h-screen w-screen opacity-60 lg:opacity-95"
+      />
 
-        <div className="border-t border-white/10 p-5 sm:p-6">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-            <label className="flex min-w-[220px] flex-1 items-center gap-4 text-sm text-steel-300">
-              <span className="shrink-0">Pitch</span>
-              <input
-                type="range"
-                min={AOA_MIN}
-                max={AOA_MAX}
-                step={0.1}
-                value={aoa}
-                onChange={(e) => setAoa(Number(e.target.value))}
-                className="h-2 w-full cursor-pointer accent-sky-400"
-                aria-label="Angle of attack in degrees"
-              />
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {[
-                [0, '0°'],
-                [DESIGN_AOA, '2.26° MX-01'],
-                [8, '8°'],
-                [15, '15°'],
-              ].map(([v, label]) => (
-                <button
-                  key={label}
-                  onClick={() => setAoa(Number(v))}
-                  className={`rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
-                    Math.abs(aoa - Number(v)) < 0.05
-                      ? 'border-sky-400 bg-sky-400 font-semibold text-ink-950'
-                      : 'border-white/15 text-steel-100 hover:border-white/40'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+      {/* Gauge: the angle of attack follows the page scroll */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed right-5 top-[22vh] z-30 hidden h-[56vh] sm:block"
+      >
+        <div className="absolute inset-y-0 right-0 w-px bg-white/20" />
+        {[0, 5, 10, 15].map((v) => (
+          <div
+            key={v}
+            className="absolute right-0 flex -translate-y-1/2 items-center gap-2 text-[11px] text-steel-400"
+            style={{ top: `${((v - AOA_START) / (AOA_END - AOA_START)) * 100}%` }}
+          >
+            {v}°<span className="h-px w-2 bg-white/30" />
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-steel-400">
-            An idealised flow model (potential flow around a cambered airfoil),
-            so it shows streamlines and lift but not drag or stall. For real
-            results, see the{' '}
-            <Link
-              to="/projects/$slug"
-              params={{ slug: 'rc-aircraft' }}
-              className="text-sky-400 hover:text-white"
-            >
-              ANSYS Fluent CFD behind MX-01
-            </Link>
-            , where 2.26° gave the best simulated L/D (13.9) of the angles I ran.
-          </p>
+        ))}
+        <div
+          className="absolute right-0 flex -translate-y-1/2 items-center gap-2 text-[11px] font-medium text-burn-400"
+          style={{ top: `${designPos}%` }}
+        >
+          MX-01 2.26°<span className="h-px w-3 bg-burn-400" />
         </div>
+        <div
+          ref={markerRef}
+          className="absolute -right-[5px] h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-sky-400 shadow-[0_0_12px_2px_rgba(124,196,255,0.7)]"
+          style={{ top: 0 }}
+        />
       </div>
-    </section>
+
+      <div className="fixed right-3 top-[74px] z-30 max-w-[260px] rounded-xl border border-white/10 bg-ink-950/75 p-2.5 backdrop-blur-md lg:bottom-6 lg:right-14 lg:top-auto lg:p-4">
+        <div className="flex items-baseline gap-5">
+          <div>
+            <p className="text-[11px] text-steel-400">Angle of attack</p>
+            <p className="display text-xl font-extrabold text-white lg:text-2xl">
+              <span ref={aoaRef}>0.0°</span>
+            </p>
+          </div>
+          <div>
+            <p className="text-[11px] text-steel-400">Lift coeff.</p>
+            <p className="display text-xl font-bold text-sky-400 lg:text-2xl">
+              <span ref={clRef}>0.00</span>
+            </p>
+          </div>
+        </div>
+        <p className="mt-2 hidden text-[11px] leading-snug text-steel-400 sm:block">
+          Scroll to pitch the wing. Idealised flow model (no drag or stall); the
+          real analysis is the{' '}
+          <Link
+            to="/projects/$slug"
+            params={{ slug: 'rc-aircraft' }}
+            className="pointer-events-auto text-sky-400 hover:text-white"
+          >
+            MX-01 CFD
+          </Link>
+          .
+        </p>
+      </div>
+    </>
   )
 }

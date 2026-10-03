@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { allProjects } from 'content-collections'
 import { Linkedin, Mail } from 'lucide-react'
 import { ProjectCard } from '@/components/ProjectCard'
-import { WingLab } from '@/components/WingLab'
+import { WingBackdrop } from '@/components/WingBackdrop'
 import { img, profile } from '@/lib/site'
 
 export const Route = createFileRoute('/')({
@@ -35,9 +35,11 @@ function Home() {
 
   return (
     <>
-      <section className="mx-auto grid min-h-screen max-w-6xl content-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.35fr_1fr] lg:items-center">
+      <WingBackdrop />
+      <div className="relative z-10">
+      <section className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-20 pt-32">
         <div className="fade-in">
-          <h1 className="display name-gradient text-[clamp(3.5rem,11vw,8.5rem)] font-extrabold leading-[0.92]">
+          <h1 className="display name-gradient text-[clamp(3.25rem,9vw,7rem)] font-extrabold leading-[0.92]">
             Muckund
             <br />
             Sharma
@@ -49,7 +51,10 @@ function Home() {
             {profile.school} · BASc Mechanical Engineering
           </p>
         </div>
-        <div className="fade-in" style={{ animationDelay: '150ms' }}>
+        <div
+          className="fade-in mt-10 max-w-xl rounded-2xl bg-ink-950/55 p-6 backdrop-blur-md"
+          style={{ animationDelay: '150ms' }}
+        >
           <p className="text-lg leading-relaxed text-steel-100/90">
             I'm a Mechanical Engineering student at the University of Waterloo
             focused on aerospace: aerodynamics, structures, and the
@@ -86,41 +91,42 @@ function Home() {
             </Link>
           </div>
         </div>
+      <p className="absolute bottom-8 left-6 text-sm text-steel-400">
+          Scroll: the wing pitches up as you go ↓
+        </p>
       </section>
 
-      <WingLab />
-
-      <section className="mx-auto grid max-w-6xl gap-4 px-6 pt-8 sm:grid-cols-2">
+      <section className="mx-auto max-w-6xl px-6 pt-8"><div className="grid gap-4 sm:grid-cols-2 lg:w-[58%]">
         {[
           ['rc-flight.jpg', 'Flight test of the finished RC aircraft'],
           ['rc-cfd.jpg', 'Turbulence kinetic energy around the wing section (ANSYS Fluent)'],
         ].map(([file, caption]) => (
           <figure key={file}>
             <img
-              src={img(file, 1200)}
+              src={img(file)}
               alt={caption}
               className="aspect-[16/10] w-full rounded-xl border border-white/10 object-cover"
             />
             <figcaption className="mt-2 text-xs text-steel-400">{caption}</figcaption>
           </figure>
         ))}
-      </section>
+      </div></section>
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
+      <section className="mx-auto max-w-6xl px-6 py-24"><div className="lg:w-[58%]">
         <h2 className="display text-4xl font-bold text-white md:text-5xl">
           What I bring
         </h2>
-        <div className="mt-12 divide-y divide-white/10 border-y border-white/10">
+        <div className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10 bg-ink-950/60 px-6 backdrop-blur-md md:px-10">
           {focus.map((f) => (
-            <div key={f.title} className="grid gap-4 py-8 md:grid-cols-[1fr_2fr] md:gap-12">
-              <h3 className="display text-2xl font-bold text-steel-100">{f.title}</h3>
+            <div key={f.title} className="grid gap-3 py-8 sm:grid-cols-[150px_1fr] sm:gap-8">
+              <h3 className="display text-xl font-bold text-steel-100">{f.title}</h3>
               <p className="text-[17px] leading-relaxed">{f.body}</p>
             </div>
           ))}
         </div>
-      </section>
+      </div></section>
 
-      <section className="mx-auto max-w-6xl px-6 py-12">
+      <section className="mx-auto max-w-6xl px-6 py-12"><div className="lg:w-[58%]">
         <div className="flex items-end justify-between gap-6">
           <h2 className="display text-4xl font-bold text-white md:text-5xl">
             Selected projects
@@ -129,15 +135,15 @@ function Home() {
             All projects →
           </Link>
         </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {featured.map((p) => (
             <ProjectCard key={p._meta.path} project={p} />
           ))}
         </div>
-      </section>
+      </div></section>
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-14">
+      <section className="mx-auto max-w-6xl px-6 py-24"><div className="lg:w-[58%]">
+        <div className="rounded-2xl border border-white/10 bg-ink-950/65 p-8 backdrop-blur-md md:p-14">
           <h2 className="display max-w-2xl text-3xl font-bold text-white md:text-5xl">
             Let's talk about what you're building.
           </h2>
@@ -152,8 +158,9 @@ function Home() {
             Get in touch
           </Link>
         </div>
-      </section>
+      </div></section>
 
+      </div>
     </>
   )
 }

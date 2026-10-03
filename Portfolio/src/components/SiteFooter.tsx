@@ -2,7 +2,7 @@ import { profile } from '@/lib/site'
 
 export function SiteFooter() {
   return (
-    <footer className="mt-12">
+    <footer className="relative z-10 mt-12">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-medium text-steel-100">{profile.name}</p>

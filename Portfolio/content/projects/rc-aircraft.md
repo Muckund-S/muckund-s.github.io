@@ -6,7 +6,7 @@ category: Aerospace
 order: 1
 featured: true
 dates: Aug 2026 – Present
-image: rc-aircraft.jpg
+image: rc-preflight.jpg
 videos:
   - youtube: oaQr4G5Oavw
     title: MX-01 controls test
@@ -31,8 +31,8 @@ tags: ["SolidWorks", "XFoil", "XFLR5", "ANSYS Fluent", "CFD", "EPS Foam", "RC Sy
 I took this aircraft from requirements to flight on my own: CAD, airfoil selection, 2D and 3D aerodynamic analysis, fabrication, and iterative flight testing. The main constraint was low Reynolds number (Re ≈ 100k), where airfoil performance degrades and small design choices matter.
 
 <figure>
-<img src="/img/rc-preflight.jpg" alt="Pre-flight with the finished MX-01" loading="lazy" />
-<figcaption>Pre-flight with the finished MX-01.</figcaption>
+<img src="/img/rc-aircraft.jpg" alt="Render of the finished MX-01" loading="lazy" />
+<figcaption>MX-01 with its livery.</figcaption>
 </figure>
 
 ## Specifications
@@ -71,6 +71,12 @@ I took this aircraft from requirements to flight on my own: CAD, airfoil selecti
 ## 3. 3D wing analysis (XFLR5)
 
 - Built the rectangular wing with the viscous polars and ran lifting-line analysis at 10 m/s.
+
+<figure>
+<img src="/img/xflr5-wing-model.jpg" alt="Rectangular wing model in XFLR5" loading="lazy" />
+<figcaption>The rectangular wing model in XFLR5.</figcaption>
+</figure>
+
 - Wing lift slope ≈ 0.077 per degree. Peak L/D ≈ 15.0 at α = 4° (CL ≈ 0.57).
 - At the 10 m/s cruise point (CL = 0.80, α ≈ 7°), L/D ≈ 14. Cruising at 11–12 m/s would put cruise at the peak.
 - Used the results to set a 2.3° wing mounting incidence that keeps the fuselage near level in cruise.
