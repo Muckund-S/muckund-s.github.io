@@ -7,7 +7,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <Link
       to="/projects/$slug"
       params={{ slug: project._meta.path }}
-      className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] text-left transition-colors hover:border-white/25 hover:bg-white/[0.05]"
+      className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-ink-900/75 text-left backdrop-blur-sm transition-colors hover:border-white/25 hover:bg-ink-800/80"
     >
       {project.image && (
         <div className="aspect-[16/10] overflow-hidden bg-ink-800">
