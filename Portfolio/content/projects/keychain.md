@@ -5,6 +5,7 @@ description: A four-component aluminum mechanical keychain modeled in SolidWorks
 category: Design & Fabrication
 order: 9
 dates: Nov 2025 – Dec 2025
+image: keychain-render.jpg
 tags: ["SolidWorks", "GD&T", "CNC Machining", "Manual Machining"]
 ---
 
@@ -15,6 +16,11 @@ I modeled a four-component aluminum keychain assembly (top plate, bottom plate, 
 ## GD&T and fit
 
 GD&T fundamentals (hole position, concentricity, and thickness tolerances) were applied so that the fasteners, gear, and keyring interfaces align properly.
+
+<figure>
+<img src="/img/keychain-drawing.png" alt="SolidWorks drawing sheet for the keychain assembly with parts list" loading="lazy" />
+<figcaption>Drawing sheet for the keychain assembly (SolidWorks).</figcaption>
+</figure>
 
 ## Manufacture
 

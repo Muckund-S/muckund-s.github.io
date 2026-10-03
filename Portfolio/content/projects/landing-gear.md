@@ -6,7 +6,7 @@ description: A lightweight carbon-fiber landing gear with an intentional breakaw
 category: Aerospace
 order: 2
 featured: true
-image: gear-assembly.jpg
+image: gear-cover.jpg
 problem:
   - Design a lightweight landing gear assembly for Pegasus 1 while maintaining structural integrity under landing loads.
   - Incorporate a controlled breakaway feature to protect the aircraft structure during high-impact landings.

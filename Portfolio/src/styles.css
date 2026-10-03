@@ -142,3 +142,7 @@ body {
 .prose-project ul ul {
   @apply mt-2;
 }
+
+.prose-project a {
+  @apply text-sky-400 underline underline-offset-4 hover:text-white;
+}
