@@ -111,3 +111,34 @@ body {
 .prose-project strong {
   @apply font-semibold text-steel-100;
 }
+
+.prose-project figure {
+  @apply mt-6;
+}
+.prose-project figure img {
+  @apply w-full rounded-xl border border-white/10 bg-white object-contain;
+  max-height: 560px;
+}
+.prose-project figcaption {
+  @apply mt-2 text-sm text-steel-400;
+}
+.prose-project .fig-row {
+  @apply mt-6 grid gap-5 sm:grid-cols-2;
+}
+.prose-project .fig-row figure {
+  @apply mt-0;
+}
+.prose-project table {
+  @apply mt-5 block w-full overflow-x-auto text-[15px];
+  border-collapse: collapse;
+}
+.prose-project th,
+.prose-project td {
+  @apply border-b border-white/10 px-4 py-2.5 text-left align-top;
+}
+.prose-project th {
+  @apply font-semibold text-steel-100;
+}
+.prose-project ul ul {
+  @apply mt-2;
+}

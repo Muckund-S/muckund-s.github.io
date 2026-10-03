@@ -26,7 +26,7 @@ for (let i = 0; i <= 180; i++) {
 const CHORD =
   Math.max(...outline.map((p) => p[0])) - Math.min(...outline.map((p) => p[0]))
 
-const DESIGN_AOA = 2.26 // MX-01 wing incidence chosen from the CFD sweep
+const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, about 2.3°)
 const AOA_MIN = -4
 const AOA_MAX = 16
 
@@ -390,7 +390,7 @@ export function WingLab() {
             >
               ANSYS Fluent CFD behind MX-01
             </Link>
-            , where 2.26° gave the best simulated L/D of 13.9.
+            , where 2.26° gave the best simulated L/D (13.9) of the angles I ran.
           </p>
         </div>
       </div>

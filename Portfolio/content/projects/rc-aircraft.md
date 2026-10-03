@@ -1,71 +1,137 @@
 ---
+title: "MX-01: Cessna 172-Inspired RC Trainer"
+subtitle: Solo design, analysis, build and flight test
+description: Designed from scratch in SolidWorks, analyzed in XFoil, XFLR5, and ANSYS Fluent, hand-built from EPS foam, and flight-tested over 12 flights. Solo project, 2 months, about $140 in components.
+category: Aerospace
+order: 1
+featured: true
 dates: Aug 2026 – Present
+image: rc-aircraft.jpg
 videos:
   - youtube: oaQr4G5Oavw
     title: MX-01 controls test
   - youtube: dkwkGfQDkbQ
     title: MX-01 maiden test flight
-title: "MX-01 RC Aircraft: Design, CFD & Fabrication"
-subtitle: MX-01, a Cessna 172-inspired RC aircraft
-description: MX-01, a complete RC aircraft designed in SolidWorks, analyzed with 3D CFD in ANSYS Fluent, and hand-built and flight-tested.
-category: Aerospace
-order: 1
-featured: true
-image: rc-aircraft.jpg
-gallery:
-  - file: rc-preflight.jpg
-    caption: Pre-flight with the finished aircraft
-  - file: rc-flight.jpg
-    caption: Flight test
-  - file: rc-drawing.jpg
-    caption: Engineering drawings of the airframe (SolidWorks)
-  - file: rc-fuselage-build.jpg
-    caption: Fuselage structure during fabrication
-  - file: rc-fuselage-electronics.jpg
-    caption: Battery, ESC and wiring installed in the fuselage
-  - file: rc-cfd.jpg
-    caption: Turbulence kinetic energy contour around the wing section (ANSYS Fluent)
-  - file: rc-ld-plot.jpg
-    caption: CL, CD and L/D versus angle of attack
-problem:
-  - Design and build a lightweight Cessna 172-inspired RC aircraft balancing aerodynamic efficiency, structural integrity, and manufacturability.
-  - Determine a wing operating condition that maximizes aerodynamic efficiency without introducing unnecessary structural complexity.
-approach:
-  - Designed the complete airframe in SolidWorks and fabricated the aircraft by hand.
-  - Performed 3D CFD analysis in ANSYS Fluent across five angles of attack, calculating CL, CD, and L/D.
-  - Used aerodynamic performance trends to guide selection of the 2.26° wing incidence.
-result:
-  - Achieved a maximum simulated L/D of 13.9 at the selected design condition, with CL = 1.294 and CD = 0.0932.
-  - Higher angles of attack produced substantially greater drag with limited lift gains, supporting the selected configuration as the most efficient condition tested.
-  - Successfully built, integrated, and flight-tested the aircraft.
 metrics:
-  - value: "13.9"
-    label: Max simulated L/D
-  - value: "2.26°"
-    label: Wing incidence
-  - value: "1.294"
-    label: CL at design point
-tags: ["SolidWorks", "ANSYS Fluent", "CFD", "Brushless Motors", "RC Systems"]
+  - value: "≈ 15"
+    label: Wing peak L/D (XFLR5)
+  - value: "0.80"
+    label: Cruise CL @ 10 m/s
+  - value: "5.2"
+    label: Aspect ratio
+  - value: "0.6 kg"
+    label: Weight
+  - value: "12"
+    label: Flights, ~1 hr airtime
+tags: ["SolidWorks", "XFoil", "XFLR5", "ANSYS Fluent", "CFD", "EPS Foam", "RC Systems"]
 ---
 
-## Design and fabrication
+## Overview
 
-I designed MX-01, a Cessna 172-inspired RC aircraft, end to end. The airframe and its engineering drawings were developed in SolidWorks, and the CAD was then translated into a hand-built, functional prototype. The goal was an aircraft that balances aerodynamic efficiency, structural integrity, and manufacturability, without adding structural complexity that the wing does not need.
+I took this aircraft from requirements to flight on my own: CAD, airfoil selection, 2D and 3D aerodynamic analysis, fabrication, and iterative flight testing. The main constraint was low Reynolds number (Re ≈ 100k), where airfoil performance degrades and small design choices matter.
 
-## CFD analysis
+<figure>
+<img src="/img/rc-preflight.jpg" alt="Pre-flight with the finished MX-01" loading="lazy" />
+<figcaption>Pre-flight with the finished MX-01.</figcaption>
+</figure>
 
-I ran 3D CFD on the wing geometry in ANSYS Fluent across five angles of attack and extracted the lift and drag forces to calculate CL, CD, and L/D at each condition. Pressure, velocity, turbulence, and wall-shear distributions were used to understand where the lift and drag come from, not just how large they are.
+## Specifications
 
-Comparing L/D trends across the sweep, I selected a **2.26° wing incidence** as the design point. It gave a peak simulated **L/D of 13.9** (CL = 1.294, CD = 0.0932). Higher angles of attack produced a disproportionate rise in drag for limited lift gain, which is what supported the selection.
+| Parameter | Value |
+| --- | --- |
+| Wing | 0.79 m span, 0.15 m chord, 0.12 m², rectangular, Clark Y |
+| Horizontal stabilizer | 0.29 m span, 0.11 m root / 0.07 m tip chord, flat plate |
+| Vertical stabilizer | 0.01 m², flat plate |
+| Tail arm | 0.27 m (horizontal tail volume ≈ 0.39) |
+| Fuselage | 0.60 m, CG at 0.35 m from nose |
+| AUW | 0.6 kg (scale-measured), wing loading ≈ 49 N/m² |
+| Propulsion | A2212 1400 kV motor, 30 A ESC, 8×6 prop, 2S 2200 mAh LiPo |
+| Control | FlySky FS-i6 / iA6B receiver, 4× SG90 servos |
 
-## Propulsion and flight control
+<figure>
+<img src="/img/rc-drawing.jpg" alt="MX-01 engineering drawings" loading="lazy" />
+<figcaption>Engineering drawings of the airframe, produced in SolidWorks.</figcaption>
+</figure>
 
-I selected, wired, and commissioned the full propulsion and control system: a 1400-kV brushless motor, a 30-A ESC, propeller, servos, receiver, and control surfaces.
+## 1. Requirements and sizing
 
-## Controls test and maiden flight
+- Targeted a 10 m/s cruise at 0.6 kg, which gives Re ≈ 100k and a required CL of ≈ 0.80 on the 0.12 m² wing.
+- Chose a rectangular planform and flat-bottom airfoil to keep foam construction simple.
 
-The videos at the top of this page show MX-01's controls test and its maiden test flight.
+## 2. Airfoil selection
 
-## Result
+- Selected the Clark Y for favourable low-Re performance and simple geometry. Imported its coordinates from airfoiltools.com into XFLR5.
+- Ran XFoil polars at Re = 50k, 100k, and 150k:
+  - Lift slope ≈ 0.1 per degree
+  - CLmax ≈ 1.38 at Re = 100k
+  - CD ≈ 0.0173 at CL = 0.7
+  - Peak CL/CD ≈ 53 at Re = 100k
+- Identified a laminar separation bubble at Re = 50k that drops peak CL/CD to ≈ 29 and marks the slow end of the envelope.
 
-The aircraft was built, integrated, and flight-tested. The flight validated the airframe structure, the propulsion integration, and the CFD-informed wing design under real flight conditions.
+## 3. 3D wing analysis (XFLR5)
+
+- Built the rectangular wing with the viscous polars and ran lifting-line analysis at 10 m/s.
+- Wing lift slope ≈ 0.077 per degree. Peak L/D ≈ 15.0 at α = 4° (CL ≈ 0.57).
+- At the 10 m/s cruise point (CL = 0.80, α ≈ 7°), L/D ≈ 14. Cruising at 11–12 m/s would put cruise at the peak.
+- Used the results to set a 2.3° wing mounting incidence that keeps the fuselage near level in cruise.
+
+## 4. CFD cross-check (ANSYS Fluent, wing only)
+
+I ran 3D CFD on the wing alone and compared it against XFLR5. XFLR5 predictions over the same range:
+
+| α (°) | XFLR5 CL | XFLR5 L/D |
+| --- | --- | --- |
+| 0 | 0.231 | 10.2 |
+| 2 | 0.411 | 14.1 |
+| 4 | 0.574 | 15.0 |
+| 6 | 0.728 | 14.5 |
+| 8 | 0.873 | 13.3 |
+
+Across the five angles I ran in Fluent, the best case was a simulated L/D of about 13.9 at 2.26°, in the same range as XFLR5's 14.1 at 2° and peak of 15.0 at 4°. Higher angles of attack produced substantially more drag for limited lift gain.
+
+<figure>
+<img src="/img/rc-ld-plot.jpg" alt="Lift coefficient, drag coefficient and L/D versus angle of attack from the Fluent runs" loading="lazy" />
+<figcaption>CL, CD and L/D versus angle of attack from the Fluent runs.</figcaption>
+</figure>
+
+I used pressure, velocity, and turbulence fields to see where lift and drag originate.
+
+<figure>
+<img src="/img/rc-cfd.jpg" alt="Turbulence kinetic energy contour around the wing section in ANSYS Fluent" loading="lazy" />
+<figcaption>Turbulence kinetic energy around the wing section (ANSYS Fluent).</figcaption>
+</figure>
+
+## 5. Fabrication
+
+- EPS foam airframe for low weight and fast shaping, with a flat-plate tail.
+- Designed the motor mount in SolidWorks, exported a DXF, and laser-cut it from hardboard.
+- Wired and commissioned the full propulsion and control system.
+
+<div class="fig-row">
+<figure>
+<img src="/img/rc-fuselage-build.jpg" alt="MX-01 fuselage structure during fabrication" loading="lazy" />
+<figcaption>Fuselage structure during fabrication.</figcaption>
+</figure>
+<figure>
+<img src="/img/rc-fuselage-electronics.jpg" alt="Battery, ESC and wiring installed in the MX-01 fuselage" loading="lazy" />
+<figcaption>Battery, ESC and wiring installed in the fuselage.</figcaption>
+</figure>
+</div>
+
+## 6. Flight testing and iteration
+
+12 flights, about 1 hour of total airtime, with trim adjustments and crash repairs between flights. The controls test and the maiden test flight are the two videos at the top of this page.
+
+<figure>
+<img src="/img/rc-flight.jpg" alt="MX-01 in flight" loading="lazy" />
+<figcaption>MX-01 in flight.</figcaption>
+</figure>
+
+- **Vibration:** torque ripple from the motor caused vibration. I added a second hardboard motor mount to stiffen the structure and reduce it.
+- **Control sensitivity:** the aircraft was overly agile, with very sensitive controls. I set transmitter expo to 30% to soften response around neutral.
+
+## Key takeaways
+
+- Cruise CL and best-L/D CL are separate targets, and low-Re airfoil behaviour (50k vs 100k+) shapes the whole flight envelope.
+- Cross-checking a fast tool (XFLR5) against CFD (Fluent) catches setup errors early.
+- Flight testing exposed problems the analysis did not: vibration and control sensitivity.

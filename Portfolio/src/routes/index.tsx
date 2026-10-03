@@ -12,7 +12,7 @@ export const Route = createFileRoute('/')({
 const focus = [
   {
     title: 'Aerodynamics & CFD',
-    body: 'Ran 3D CFD in ANSYS Fluent across five angles of attack to pick the wing incidence for my RC aircraft, MX-01: 2.26° gave a maximum simulated L/D of 13.9 (CL 1.294, CD 0.0932). I read pressure, velocity, turbulence and wall-shear fields to explain where the lift and drag come from, then built and flew the aircraft.',
+    body: 'Sized and analyzed the wing of my RC trainer, MX-01, at Re ≈ 100k: XFoil and XFLR5 for airfoil and lifting-line results (peak L/D ≈ 15), then a 3D ANSYS Fluent cross-check (best simulated L/D ≈ 13.9 at 2.26°). I read pressure, velocity and turbulence fields to see where lift and drag come from, then built it and flew it 12 times.',
   },
   {
     title: 'Structures & FEA',
@@ -54,7 +54,7 @@ function Home() {
             I'm a Mechanical Engineering student at the University of Waterloo
             focused on aerospace: aerodynamics, structures, and the
             manufacturing that takes a design off the screen and into the air.
-            I've flight-tested MX-01, an RC aircraft whose wing I selected with CFD,
+            I've designed, analyzed and flight-tested MX-01, a hand-built RC trainer,
             validated a landing-gear bracket with FEA, and run composite
             compression testing for Waterloo Rocketry.
           </p>
