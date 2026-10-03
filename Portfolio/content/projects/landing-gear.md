@@ -7,11 +7,6 @@ category: Aerospace
 order: 2
 featured: true
 image: gear-assembly.jpg
-gallery:
-  - file: gear-bracket.jpg
-    caption: 3D-printed PETG-CF breakaway bracket (SolidWorks)
-  - file: gear-fea.jpg
-    caption: 4g (196.2 N) stress contour on the bracket
 problem:
   - Design a lightweight landing gear assembly for Pegasus 1 while maintaining structural integrity under landing loads.
   - Incorporate a controlled breakaway feature to protect the aircraft structure during high-impact landings.
@@ -35,9 +30,19 @@ tags: ["SolidWorks", "FEA", "Carbon Fiber", "3D Printing", "Design for Failure"]
 
 The Pegasus 1 landing gear uses 22 mm OD carbon-fiber tubes and a 3D-printed PETG-CF bracket. The bracket includes an intentional breakaway section with an hourglass neck, so that in a hard crash the sacrificial joint fails before the primary airframe or carbon-fiber tubes are overloaded.
 
+<figure>
+<img src="/img/gear-leg.jpg" alt="SolidWorks render of one Pegasus 1 landing-gear leg: carbon-fiber tubes, clamps and a T-shaped foot" loading="lazy" />
+<figcaption>One landing-gear leg: carbon-fiber tubes, clamped joints and a T-shaped foot (SolidWorks).</figcaption>
+</figure>
+
 ## FEA validation
 
 I modeled the bracket in isolation and ran orthotropic linear-static FEA under a 1–4g load sweep (4g = 196.2 N). At 1g normal landing loads the bracket has a **3.81 factor of safety**. At 4g the analysis predicts tensile-failure onset at the hourglass neck, which is the intended sacrificial failure.
+
+<figure>
+<img src="/img/gear-fea.jpg" alt="Stress contour on the landing-gear bracket at 4g in ANSYS" loading="lazy" />
+<figcaption>4g (196.2 N) stress contour on the bracket.</figcaption>
+</figure>
 
 ## Mesh convergence
 

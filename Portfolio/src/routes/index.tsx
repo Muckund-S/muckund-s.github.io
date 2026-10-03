@@ -43,24 +43,32 @@ function Home() {
             <br />
             Sharma
           </h1>
-          <p className="wide mt-8 text-lg font-semibold text-white sm:text-xl">
-            Mechanical Engineer
-          </p>
+          <div className="mt-8 flex items-center gap-4">
+            <p className="wide text-lg font-semibold text-white sm:text-xl">
+              Mechanical Engineer
+            </p>
+            {profile.schoolLogo && (
+              <>
+                <span className="h-7 w-px bg-white/25" aria-hidden="true" />
+                <img
+                  src={img(profile.schoolLogo)}
+                  alt={profile.school}
+                  className="h-9 w-auto sm:h-11"
+                />
+              </>
+            )}
+          </div>
           <p className="mt-2 text-steel-400">
             {profile.school} · BASc Mechanical Engineering
           </p>
         </div>
         <div className="fade-in" style={{ animationDelay: '150ms' }}>
-          <p className="text-lg leading-relaxed text-steel-100/90">
-            I'm a Mechanical Engineering student at the University of Waterloo
-            focused on aerospace: aerodynamics, structures, and the
-            manufacturing that takes a design off the screen and into the air.
-            I've designed, analyzed and flight-tested MX-01, a hand-built RC trainer,
-            validated a landing-gear bracket with FEA, and run composite
-            compression testing for Waterloo Rocketry.
+          <p className="display text-3xl font-bold leading-snug text-white sm:text-4xl">
+            {profile.tagline}
           </p>
-          <p className="mt-4 text-steel-400">
-            Looking for aerospace and mechanical design co-op opportunities.
+          <p className="mt-5 text-lg leading-relaxed text-steel-300">
+            Aerodynamics, structures, and hand-built aircraft. Looking for
+            aerospace and mechanical design co-op opportunities.
           </p>
           <div className="mt-8 flex items-center gap-5 text-steel-300">
             <a
