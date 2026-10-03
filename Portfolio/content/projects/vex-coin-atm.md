@@ -5,6 +5,8 @@ description: A multi-user automated coin ATM built from VEX IQ parts, a laser-cu
 category: Robotics & Embedded
 order: 5
 dates: Jan 2026 – Apr 2026
+image: atm-model.jpg
+youtube: sn-0u3_LIF4
 tags: ["C++", "Embedded Control", "Laser Cutting", "3D Printing", "Sensor Calibration"]
 metrics:
   - value: "96.7%"
@@ -18,6 +20,11 @@ metrics:
 ## Overview
 
 I designed and fabricated a multi-user automated coin ATM using VEX IQ components, a laser-cut HDF frame, and 3D-printed drivetrain parts, managing the build and the software integration across a 4-person team.
+
+<figure>
+<img src="/img/atm-closeup.jpg" alt="Close-up of the SolidWorks model of the coin ATM mechanism" loading="lazy" />
+<figcaption>Close-up of the SolidWorks model.</figcaption>
+</figure>
 
 ## Software architecture
 

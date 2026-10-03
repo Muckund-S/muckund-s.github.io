@@ -4,6 +4,7 @@ company: Waterloo Rocketry
 location: Waterloo, ON
 startDate: Sep 2025
 endDate: May 2026
+logo: logo-rocketry.png
 order: 2
 tags: ["Composites", "ASTM D695", "Python", "Vacuum Infusion", "Waterjet", "Machining"]
 ---

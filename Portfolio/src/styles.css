@@ -61,6 +61,40 @@ body {
   color: transparent;
 }
 
+/* Name: each line slides up out of a mask, then a light sweeps across it once */
+.name-line {
+  display: block;
+  overflow: hidden;
+  padding: 0.06em 0.04em 0.1em 0;
+  margin: -0.06em 0 -0.1em;
+}
+.name-rise {
+  display: block;
+  background-image:
+    linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.95) 50%, transparent 58%),
+    linear-gradient(100deg, #ffffff 10%, #bfe3ff 55%, #7cc4ff 100%);
+  background-size: 260% 100%, 100% 100%;
+  background-position: 160% 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translateY(108%);
+  animation:
+    name-rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
+    name-sweep 1.5s ease-in-out 0.9s forwards;
+}
+@keyframes name-rise {
+  to { transform: translateY(0); }
+}
+@keyframes name-sweep {
+  from { background-position: 160% 0, 0 0; }
+  to { background-position: -60% 0, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .name-rise { transform: none; }
+}
+
 .fade-in {
   animation: fade-in 0.9s ease-out both;
 }
