@@ -5,7 +5,7 @@ description: A multi-user automated coin ATM built from VEX IQ parts, a laser-cu
 category: Robotics & Embedded
 order: 5
 dates: Jan 2026 – Apr 2026
-image: atm-model.jpg
+image: atm-built-front.jpg
 youtube: sn-0u3_LIF4
 tags: ["C++", "Embedded Control", "Laser Cutting", "3D Printing", "Sensor Calibration"]
 metrics:
@@ -20,6 +20,32 @@ metrics:
 ## Overview
 
 I designed and fabricated a multi-user automated coin ATM using VEX IQ components, a laser-cut HDF frame, and 3D-printed drivetrain parts, managing the build and the software integration across a 4-person team.
+
+<div class="fig-row">
+<figure>
+<img src="/img/atm-built-angle.jpg" alt="The finished Stash&Store ATM on a table, with coin slot, screen and coin tray" loading="lazy" />
+<figcaption>The finished machine: coin slot, screen and coin tray.</figcaption>
+</figure>
+<figure>
+<img src="/img/atm-cad-enclosure.jpg" alt="SolidWorks model of the ATM enclosure with coin slot, screen opening and tray opening" loading="lazy" />
+<figcaption>The enclosure modeled in SolidWorks.</figcaption>
+</figure>
+</div>
+
+## Mechanism
+
+The internal layout was modeled in SolidWorks before anything was cut.
+
+<div class="fig-row">
+<figure>
+<img src="/img/atm-model.jpg" alt="SolidWorks model of the full internal assembly: brain, coin channel, ramp and tray" loading="lazy" />
+<figcaption>Internal assembly in SolidWorks.</figcaption>
+</figure>
+<figure>
+<img src="/img/atm-cad-sensor.jpg" alt="Close-up of the VEX IQ brain and the coin channel in the SolidWorks model" loading="lazy" />
+<figcaption>Close-up of the VEX IQ brain and the coin channel.</figcaption>
+</figure>
+</div>
 
 <figure>
 <img src="/img/atm-closeup.jpg" alt="Close-up of the SolidWorks model of the coin ATM mechanism" loading="lazy" />
