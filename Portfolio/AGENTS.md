@@ -17,3 +17,7 @@ A personal mechanical engineering portfolio for Muckund Sharma, built with TanSt
 - Motion is minimal: only the hero uses `fade-in`. Reduced motion is respected globally.
 - Always reference images through `img()` so paths stay in one place.
 - Project images in `public/img/` come from Muckund's own work (CAD, CFD, FEA, photos). Five older projects that used AI-generated stand-in images are parked in `archive/`; restore one only with a real photo.
+
+## Project pages and video
+
+Each project is a full page at `/projects/<file-name>`, rendered from `content/projects/<file-name>.md`. Front matter sets the card and header (title, dates, category, tags, metrics, optional `image`, `gallery`, `problem` / `approach` / `result`); the Markdown body is the write-up (use `##` headings). To add a video, put an mp4 (H.264, ideally under 50 MB) in `public/video/` and set `video: name.mp4`, or set `youtube: <video id>` for a YouTube embed.

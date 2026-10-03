@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { allProjects, type Project } from 'content-collections'
+import { allProjects } from 'content-collections'
 import { ProjectCard } from '@/components/ProjectCard'
-import { ProjectDialog } from '@/components/ProjectDialog'
 
-export const Route = createFileRoute('/projects')({
+export const Route = createFileRoute('/projects/')({
   head: () => ({ meta: [{ title: 'Projects | Muckund Sharma' }] }),
   component: Projects,
 })
@@ -14,7 +13,6 @@ const categories = ['All', ...new Set(projects.map((p) => p.category))]
 
 function Projects() {
   const [filter, setFilter] = useState('All')
-  const [active, setActive] = useState<Project | null>(null)
   const visible =
     filter === 'All' ? projects : projects.filter((p) => p.category === filter)
 
@@ -26,7 +24,7 @@ function Projects() {
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg">
           Aerospace design, analysis and fabrication work. Open a project for
-          the problem, my approach, and the results.
+          the full write-up.
         </p>
         <select
           value={filter}
@@ -42,10 +40,9 @@ function Projects() {
 
       <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {visible.map((p) => (
-          <ProjectCard key={p._meta.path} project={p} onOpen={setActive} />
+          <ProjectCard key={p._meta.path} project={p} />
         ))}
       </div>
-      <ProjectDialog project={active} onClose={() => setActive(null)} />
     </div>
   )
 }

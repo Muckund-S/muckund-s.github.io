@@ -1,9 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { allProjects, type Project } from 'content-collections'
+import { allProjects } from 'content-collections'
 import { Linkedin, Mail } from 'lucide-react'
 import { ProjectCard } from '@/components/ProjectCard'
-import { ProjectDialog } from '@/components/ProjectDialog'
 import { img, profile } from '@/lib/site'
 
 export const Route = createFileRoute('/')({
@@ -30,7 +28,6 @@ const focus = [
 ]
 
 function Home() {
-  const [active, setActive] = useState<Project | null>(null)
   const featured = allProjects
     .filter((p) => p.featured)
     .sort((a, b) => a.order - b.order)
@@ -131,7 +128,7 @@ function Home() {
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {featured.map((p) => (
-            <ProjectCard key={p._meta.path} project={p} onOpen={setActive} />
+            <ProjectCard key={p._meta.path} project={p} />
           ))}
         </div>
       </section>
@@ -154,7 +151,6 @@ function Home() {
         </div>
       </section>
 
-      <ProjectDialog project={active} onClose={() => setActive(null)} />
     </>
   )
 }
