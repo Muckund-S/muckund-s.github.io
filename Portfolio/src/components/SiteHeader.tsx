@@ -17,7 +17,7 @@ export function SiteHeader() {
       <nav className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-white/10 bg-ink-950/70 p-1.5 backdrop-blur-xl">
         <Link
           to="/"
-          aria-label="Home (the plane takes off)"
+          aria-label="Home (the Concorde takes off)"
           className="grid h-9 w-9 place-items-center text-steel-100 transition-transform hover:scale-110"
           onPointerEnter={warmUpFlyHome}
           onFocus={warmUpFlyHome}
