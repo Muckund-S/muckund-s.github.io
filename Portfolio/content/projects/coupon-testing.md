@@ -7,11 +7,6 @@ category: Materials
 order: 3
 featured: true
 image: coupon-test.jpg
-gallery:
-  - file: coupon-plot.jpg
-    caption: Stress vs. strain comparison of the six laminates
-  - file: coupon-fixture.jpg
-    caption: Compression-testing fixture drawing (Boeing BSS 7260)
 problem:
   - Select a fiberglass laminate for the Polaris rocket airframe based on compression performance and material cost.
   - Compare six laminate configurations under standardized mechanical testing conditions.
@@ -37,9 +32,31 @@ I compression-tested six fiberglass laminate configurations for the Polaris rock
 
 I machined a Boeing BSS 7260 compression-testing fixture from technical drawings using manual milling and lathe operations, holding tight tolerances so coupons align consistently. I also manufactured precision aluminum alignment tabs on a CNC waterjet to support standardized testing.
 
+<div class="fig-row">
+<figure>
+<img src="/img/coupon-fixture-photo.jpg" alt="The machined aluminum compression-testing fixture with four socket-head cap screws, holding a coupon" loading="lazy" />
+<figcaption>The machined compression-testing fixture with a coupon clamped in place.</figcaption>
+</figure>
+<figure>
+<img src="/img/coupon-fixture.jpg" alt="Boeing BSS 7260 compression-testing fixture drawing" loading="lazy" />
+<figcaption>Fixture drawing (Boeing BSS 7260).</figcaption>
+</figure>
+</div>
+
 ## Data pipeline
 
 I wrote a Python pipeline that converts raw load and displacement data into stress-strain curves and extracts key failure properties, so all six laminates can be compared quantitatively and repeatably.
+
+<div class="fig-row">
+<figure>
+<img src="/img/coupon-raw-data.png" alt="Raw time, crosshead displacement and load data exported from the test system" loading="lazy" />
+<figcaption>Raw time, crosshead and load export from the test system.</figcaption>
+</figure>
+<figure>
+<img src="/img/coupon-plot.png" alt="Stress versus strain curves for the six laminates A1 to A6" loading="lazy" />
+<figcaption>Stress vs. strain for the six laminates (A1–A6) from the Python pipeline. Red dots mark each laminate's peak stress.</figcaption>
+</figure>
+</div>
 
 ## Related composites work
 

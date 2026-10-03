@@ -8,7 +8,7 @@ featured: true
 dates: Aug 2026 – Present
 image: rc-preflight.jpg
 videos:
-  - youtube: oaQr4G5Oavw
+  - youtube: xT8dXaTI_v8
     title: MX-01 controls test
   - youtube: dkwkGfQDkbQ
     title: MX-01 maiden test flight
@@ -31,7 +31,7 @@ tags: ["SolidWorks", "XFoil", "XFLR5", "ANSYS Fluent", "CFD", "EPS Foam", "RC Sy
 I took this aircraft from requirements to flight on my own: CAD, airfoil selection, 2D and 3D aerodynamic analysis, fabrication, and iterative flight testing. The main constraint was low Reynolds number (Re ≈ 100k), where airfoil performance degrades and small design choices matter.
 
 <figure>
-<img src="/img/rc-aircraft.jpg" alt="Render of the finished MX-01" loading="lazy" />
+<img src="/img/rc-livery.jpg" alt="MX-01 on a table, with its red and white livery and navigation lights on" loading="lazy" />
 <figcaption>MX-01 with its livery.</figcaption>
 </figure>
 
@@ -49,8 +49,13 @@ I took this aircraft from requirements to flight on my own: CAD, airfoil selecti
 | Control | FlySky FS-i6 / iA6B receiver, 4× SG90 servos |
 
 <figure>
-<img src="/img/rc-drawing.jpg" alt="MX-01 engineering drawings" loading="lazy" />
-<figcaption>Engineering drawings of the airframe, produced in SolidWorks.</figcaption>
+<img src="/img/rc-cad-model.jpg" alt="SolidWorks model of MX-01" loading="lazy" />
+<figcaption>The SolidWorks model of MX-01.</figcaption>
+</figure>
+
+<figure>
+<img src="/img/rc-drawing-sheet.png" alt="MX-01 engineering drawing sheet with side, front and top views and an isometric view" loading="lazy" />
+<figcaption>Engineering drawing sheet: side, front and top views plus isometric (click to enlarge).</figcaption>
 </figure>
 
 ## 1. Requirements and sizing
@@ -83,22 +88,17 @@ I took this aircraft from requirements to flight on my own: CAD, airfoil selecti
 
 ## 4. CFD cross-check (ANSYS Fluent, wing only)
 
-I ran 3D CFD on the wing alone and compared it against XFLR5. XFLR5 predictions over the same range:
+I ran 3D CFD on the wing alone and compared it against XFLR5.
 
-| α (°) | XFLR5 CL | XFLR5 L/D |
-| --- | --- | --- |
-| 0 | 0.231 | 10.2 |
-| 2 | 0.411 | 14.1 |
-| 4 | 0.574 | 15.0 |
-| 6 | 0.728 | 14.5 |
-| 8 | 0.873 | 13.3 |
+| α (°) | XFLR5 CL | XFLR5 L/D | Fluent CL | Fluent CD | Fluent L/D | CL diff (%) | L/D diff (%) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0.231 | 10.2 | TBD | TBD | TBD | TBD | TBD |
+| 2 | 0.411 | 14.1 | TBD | TBD | TBD | TBD | TBD |
+| 4 | 0.574 | 15.0 | TBD | TBD | TBD | TBD | TBD |
+| 6 | 0.728 | 14.5 | TBD | TBD | TBD | TBD | TBD |
+| 8 | 0.873 | 13.3 | TBD | TBD | TBD | TBD | TBD |
 
-Across the five angles I ran in Fluent, the best case was a simulated L/D of about 13.9 at 2.26°, in the same range as XFLR5's 14.1 at 2° and peak of 15.0 at 4°. Higher angles of attack produced substantially more drag for limited lift gain.
-
-<figure>
-<img src="/img/rc-ld-plot.jpg" alt="Lift coefficient, drag coefficient and L/D versus angle of attack from the Fluent runs" loading="lazy" />
-<figcaption>CL, CD and L/D versus angle of attack from the Fluent runs.</figcaption>
-</figure>
+Fluent setup: turbulence model TBD, mesh size TBD, domain TBD.
 
 I used pressure, velocity, and turbulence fields to see where lift and drag originate.
 
