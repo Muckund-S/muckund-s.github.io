@@ -1,6 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Linkedin, Mail } from 'lucide-react'
-import { FlightEnvelope } from '@/components/FlightEnvelope'
 import { WingLab } from '@/components/WingLab'
 import { img, profile } from '@/lib/site'
 
@@ -106,8 +105,6 @@ function Home() {
           ))}
         </div>
       </section>
-
-      <FlightEnvelope />
 
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-14">
