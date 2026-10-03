@@ -10,7 +10,7 @@ export const profile = {
   email: 'm269shar@uwaterloo.ca',
   linkedin: 'https://ca.linkedin.com/in/muckund-sharma-aa3717363',
   // File name in public/img/ for the University of Waterloo logo; shown next to the title when set.
-  schoolLogo: undefined as string | undefined,
+  schoolLogo: 'uwaterloo-logo.png' as string | undefined,
   resumeFile: '/Muckund-Sharma-Resume.pdf',
 }
 

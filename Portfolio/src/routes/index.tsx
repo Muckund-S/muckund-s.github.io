@@ -1,7 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { allProjects } from 'content-collections'
 import { Linkedin, Mail } from 'lucide-react'
-import { ProjectCard } from '@/components/ProjectCard'
 import { FlightEnvelope } from '@/components/FlightEnvelope'
 import { WingLab } from '@/components/WingLab'
 import { img, profile } from '@/lib/site'
@@ -30,10 +28,6 @@ const focus = [
 ]
 
 function Home() {
-  const featured = allProjects
-    .filter((p) => p.featured)
-    .sort((a, b) => a.order - b.order)
-
   return (
     <>
       <section className="mx-auto grid min-h-[78vh] max-w-6xl content-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.35fr_1fr] lg:items-center">
@@ -99,22 +93,6 @@ function Home() {
 
       <WingLab />
 
-      <section className="mx-auto grid max-w-6xl gap-4 px-6 pt-8 sm:grid-cols-2">
-        {[
-          ['rc-flight.jpg', 'Flight test of the finished RC aircraft'],
-          ['rc-cfd.jpg', 'Turbulence kinetic energy around the wing section (ANSYS Fluent)'],
-        ].map(([file, caption]) => (
-          <figure key={file}>
-            <img
-              src={img(file)}
-              alt={caption}
-              className="aspect-[4/3] w-full rounded-xl border border-white/10 object-cover"
-            />
-            <figcaption className="mt-2 text-xs text-steel-400">{caption}</figcaption>
-          </figure>
-        ))}
-      </section>
-
       <section className="mx-auto max-w-6xl px-6 py-24">
         <h2 className="display text-4xl font-bold text-white md:text-5xl">
           What I bring
@@ -131,22 +109,6 @@ function Home() {
 
       <FlightEnvelope />
 
-      <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="flex items-end justify-between gap-6">
-          <h2 className="display text-4xl font-bold text-white md:text-5xl">
-            Selected projects
-          </h2>
-          <Link to="/projects" className="hidden text-sm font-medium text-sky-400 hover:text-white sm:block">
-            All projects →
-          </Link>
-        </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {featured.map((p) => (
-            <ProjectCard key={p._meta.path} project={p} />
-          ))}
-        </div>
-      </section>
-
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-14">
           <h2 className="display max-w-2xl text-3xl font-bold text-white md:text-5xl">
@@ -156,12 +118,20 @@ function Home() {
             I'm available for co-op roles in aerospace, structures, and
             mechanical design.
           </p>
-          <Link
-            to="/contact"
-            className="mt-8 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink-950 hover:bg-sky-400"
-          >
-            Get in touch
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/contact"
+              className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink-950 hover:bg-sky-400"
+            >
+              Get in touch
+            </Link>
+            <Link
+              to="/projects"
+              className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              See my projects
+            </Link>
+          </div>
         </div>
       </section>
 
