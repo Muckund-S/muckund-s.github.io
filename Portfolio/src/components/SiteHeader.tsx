@@ -1,5 +1,6 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Plane } from 'lucide-react'
+import { flyHome, warmUpFlyHome } from '@/lib/flyHome'
 
 const tabs = [
   { to: '/', label: 'Home' },
@@ -9,13 +10,21 @@ const tabs = [
 ] as const
 
 export function SiteHeader() {
+  const navigate = useNavigate()
+
   return (
     <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-3">
       <nav className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-white/10 bg-ink-950/70 p-1.5 backdrop-blur-xl">
         <Link
           to="/"
-          aria-label="Home"
-          className="grid h-9 w-9 place-items-center text-steel-100"
+          aria-label="Home (the plane takes off)"
+          className="grid h-9 w-9 place-items-center text-steel-100 transition-transform hover:scale-110"
+          onPointerEnter={warmUpFlyHome}
+          onFocus={warmUpFlyHome}
+          onClick={(e) => {
+            e.preventDefault()
+            void flyHome(e.currentTarget, () => navigate({ to: '/' }))
+          }}
         >
           <Plane size={18} className="-rotate-45" />
         </Link>
