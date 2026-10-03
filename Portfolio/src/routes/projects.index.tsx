@@ -22,9 +22,10 @@ function Projects() {
         <h1 className="display text-5xl font-extrabold text-white md:text-7xl">
           My Projects
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg">
-          Aerospace design, analysis and fabrication work. Open a project for
-          the full write-up.
+        <p className="mx-auto mt-6 max-w-2xl text-center text-lg">
+          Aerospace design, analysis and fabrication work.
+          <br />
+          Open a project for the full write-up.
         </p>
         <select
           value={filter}
