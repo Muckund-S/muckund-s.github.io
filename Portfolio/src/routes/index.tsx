@@ -100,7 +100,7 @@ function Home() {
             <img
               src={img(file)}
               alt={caption}
-              className="aspect-[16/10] w-full rounded-xl border border-white/10 object-cover"
+              className="aspect-[4/3] w-full rounded-xl border border-white/10 object-cover"
             />
             <figcaption className="mt-2 text-xs text-steel-400">{caption}</figcaption>
           </figure>

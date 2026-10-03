@@ -88,22 +88,17 @@ I took this aircraft from requirements to flight on my own: CAD, airfoil selecti
 
 ## 4. CFD cross-check (ANSYS Fluent, wing only)
 
-I ran 3D CFD on the wing alone and compared it against XFLR5. XFLR5 predictions over the same range:
+I ran 3D CFD on the wing alone and compared it against XFLR5.
 
-| α (°) | XFLR5 CL | XFLR5 L/D |
-| --- | --- | --- |
-| 0 | 0.231 | 10.2 |
-| 2 | 0.411 | 14.1 |
-| 4 | 0.574 | 15.0 |
-| 6 | 0.728 | 14.5 |
-| 8 | 0.873 | 13.3 |
+| α (°) | XFLR5 CL | XFLR5 L/D | Fluent CL | Fluent CD | Fluent L/D | CL diff (%) | L/D diff (%) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0.231 | 10.2 | TBD | TBD | TBD | TBD | TBD |
+| 2 | 0.411 | 14.1 | TBD | TBD | TBD | TBD | TBD |
+| 4 | 0.574 | 15.0 | TBD | TBD | TBD | TBD | TBD |
+| 6 | 0.728 | 14.5 | TBD | TBD | TBD | TBD | TBD |
+| 8 | 0.873 | 13.3 | TBD | TBD | TBD | TBD | TBD |
 
-Across the five angles I ran in Fluent, the best case was a simulated L/D of about 13.9 at 2.26°, in the same range as XFLR5's 14.1 at 2° and peak of 15.0 at 4°. Higher angles of attack produced substantially more drag for limited lift gain.
-
-<figure>
-<img src="/img/rc-ld-plot.jpg" alt="Lift coefficient, drag coefficient and L/D versus angle of attack from the Fluent runs" loading="lazy" />
-<figcaption>CL, CD and L/D versus angle of attack from the Fluent runs.</figcaption>
-</figure>
+Fluent setup: turbulence model TBD, mesh size TBD, domain TBD.
 
 I used pressure, velocity, and turbulence fields to see where lift and drag originate.
 
