@@ -1,5 +1,7 @@
 import { marked } from 'marked'
 
+export const SITE_URL = 'https://muckund.ca'
+
 export const profile = {
   name: 'Muckund Sharma',
   shortName: 'Muckund',
@@ -8,6 +10,7 @@ export const profile = {
   tagline: 'Driven to advance and redefine the next era of flight.',
   location: 'Waterloo, ON',
   email: 'm269shar@uwaterloo.ca',
+  github: 'https://github.com/Muckund-S',
   linkedin: 'https://ca.linkedin.com/in/muckund-sharma-aa3717363',
   // File name in public/img/ for the University of Waterloo logo; shown next to the title when set.
   schoolLogo: 'uwaterloo-logo.png' as string | undefined,

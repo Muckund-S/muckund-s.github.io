@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { Linkedin, Mail } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 import { WingLab } from '@/components/WingLab'
 import { img, profile } from '@/lib/site'
 
@@ -58,6 +58,15 @@ function Home() {
               className="hover:text-white"
             >
               <Linkedin size={26} />
+            </a>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="hover:text-white"
+            >
+              <Github size={26} />
             </a>
             <a
               href={`mailto:${profile.email}`}

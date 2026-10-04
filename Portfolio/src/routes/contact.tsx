@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Check, Copy, FileText, Linkedin, Mail } from 'lucide-react'
+import { Check, Copy, FileText, Github, Linkedin, Mail } from 'lucide-react'
 import { profile } from '@/lib/site'
 
 export const Route = createFileRoute('/contact')({
@@ -13,6 +13,7 @@ const field =
 
 const links = [
   { icon: Linkedin, label: 'LinkedIn', detail: 'Connect with me', href: profile.linkedin },
+  { icon: Github, label: 'GitHub', detail: 'Code and projects', href: profile.github },
   { icon: FileText, label: 'Resume', detail: 'View or download PDF', href: profile.resumeFile },
 ]
 

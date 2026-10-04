@@ -4,8 +4,10 @@ title: Pegasus 1 Landing Gear & FEA
 subtitle: Waterloo Aerial Robotics Group
 description: A lightweight carbon-fiber landing gear with an intentional breakaway section, validated with orthotropic linear-static FEA.
 category: Aerospace
-order: 2
+summary: "Carbon-fiber landing gear with a deliberate breakaway joint; 3.81 factor of safety at 1g from orthotropic FEA."
+role: "Mechanical design team member, Waterloo Aerial Robotics Group."
 featured: true
+order: 2
 image: gear-cover.jpg
 problem:
   - Design a lightweight landing gear assembly for Pegasus 1 while maintaining structural integrity under landing loads.

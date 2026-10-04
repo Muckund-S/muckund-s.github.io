@@ -4,8 +4,10 @@ title: Coupon Compression Testing
 subtitle: Waterloo Rocketry
 description: Standardized compression testing of six fiberglass laminates to select the Polaris rocket airframe material.
 category: Materials
-order: 3
+summary: "Compression-tested six fiberglass laminates to ASTM D695 and automated the analysis in Python."
+role: "Core airframe team member, Waterloo Rocketry."
 featured: true
+order: 3
 image: coupon-test.jpg
 problem:
   - Select a fiberglass laminate for the Polaris rocket airframe based on compression performance and material cost.
