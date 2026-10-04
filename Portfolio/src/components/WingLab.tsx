@@ -132,6 +132,18 @@ function velocity(x: number, y: number, a: number): [number, number] | null {
   return [fr, -fi]
 }
 
+/** Separated-flow bubble (ellipse in body coordinates) over the rear of the upper surface. */
+function bubble(sf: number) {
+  const chord = X_MAX - X_MIN
+  const xsep = X_MAX - (0.12 + 0.46 * sf) * chord
+  const xEnd = X_MAX + 0.12 * chord
+  const a = (xEnd - xsep) / 2
+  const xc = xsep + a
+  const b = Math.min(a * 0.9, 0.05 * chord + 0.14 * chord * sf)
+  const yc = upperY(Math.min(xc, X_MAX)) + b * 0.85
+  return { xc, yc, a, b }
+}
+
 type Particle = { x: number; y: number; px: number; py: number; life: number; sep?: boolean }
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
@@ -223,20 +235,19 @@ export function WingLab() {
       return `rgba(${Math.round(160 + 90 * t)},${Math.round(210 - 130 * t)},${Math.round(255 - 215 * t)},0.85)`
     }
 
-    // Once the wing has stalled, some new particles are seeded inside the separated
-    // region so it reads as a churning, recirculating pocket.
+    // Once the wing has stalled, some new particles are seeded inside the bubble so
+    // the recirculation is visible without waiting for the outer flow to feed it.
     const respawn = (p: Particle) => {
       const sf = stallFraction(current)
-      if (sf > 0.02 && Math.random() < 0.5 * sf) {
+      if (sf > 0.02 && Math.random() < 0.35 * Math.min(1, sf * 3)) {
         const a = (current * Math.PI) / 180
         const ca = Math.cos(a)
         const sa = Math.sin(a)
-        const chord = X_MAX - X_MIN
-        const xsep = X_MAX - (0.05 + 0.62 * sf) * chord
-        const bx = xsep + Math.random() * (X_MAX + 0.2 * chord - xsep)
-        const surf = upperY(Math.min(bx, X_MAX))
-        const grow = Math.min(1, (bx - xsep) / (0.5 * chord))
-        const by = surf + Math.random() * (0.2 + 0.8 * grow) * chord * 0.3 * sf * 0.8
+        const bub = bubble(sf)
+        const ang = Math.random() * Math.PI * 2
+        const rad = Math.sqrt(Math.random()) * 0.85
+        const bx = bub.xc + Math.cos(ang) * rad * bub.a
+        const by = bub.yc + Math.sin(ang) * rad * bub.b
         p.x = bx * ca + by * sa
         p.y = -bx * sa + by * ca
         p.px = p.x
@@ -263,19 +274,22 @@ export function WingLab() {
         const sf = stallFraction(current)
         p.sep = false
         if (sf > 0.02) {
+          const bub = bubble(sf)
           const bx = p.x * ca - p.y * sa
           const by = p.x * sa + p.y * ca
-          const chord = X_MAX - X_MIN
-          const xsep = X_MAX - (0.05 + 0.62 * sf) * chord
-          if (bx > xsep && bx < X_MAX + 0.45 * chord) {
-            const surf = upperY(Math.min(bx, X_MAX))
-            const grow = Math.min(1, (bx - xsep) / (0.5 * chord))
-            const band = (0.2 + 0.8 * grow) * chord * 0.3 * sf * (0.65 + 0.35 * Math.random())
-            if (by > surf - 0.06 && by < surf + band) {
-              p.sep = true
-              u = u * (1 - 1.2 * sf) + (Math.random() - 0.5) * 1.4 * sf
-              vv = vv * (1 - 0.6 * sf) + (Math.random() - 0.5) * 1.5 * sf - 0.35 * sf
-            }
+          const nx = (bx - bub.xc) / bub.a
+          const ny = (by - bub.yc) / bub.b
+          const d = Math.hypot(nx, ny)
+          if (d < 1) {
+            // Recirculation bubble: the outer flow runs downstream along the top and
+            // rolls back upstream along the surface, i.e. clockwise in this view.
+            const w = Math.min(1, (1 - d) / 0.4) * Math.min(1, sf * 3)
+            const U0 = 1.25
+            const ru = U0 * ny
+            const rv = -U0 * (bub.b / bub.a) * nx
+            u = u * (1 - w) + ru * w
+            vv = vv * (1 - w) + rv * w
+            p.sep = w > 0.35
           }
         }
         const sp = Math.hypot(u, vv)
@@ -288,8 +302,6 @@ export function WingLab() {
         p.life += dt
         if (p.x > worldR + 0.6 || Math.abs(p.y) > halfH + 1.5 || p.life > 40) {
           respawn(p)
-        } else if (p.sep && p.life > 2.2) {
-          respawn(p) // recirculate: eddies don't leave the wing at once
         }
       }
     }
