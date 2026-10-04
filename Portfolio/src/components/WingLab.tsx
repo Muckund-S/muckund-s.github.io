@@ -38,6 +38,51 @@ function liftCoefficient(aoaDeg: number) {
   return (2 * gamma) / CHORD
 }
 
+// ---- Stylised stall -------------------------------------------------------
+// Potential flow has no separation, so the stall is a stylised overlay: lift
+// peaks at the XFoil CLmax for this airfoil (1.38 at Re = 100k), the flow
+// detaches from the upper surface and the lift falls away.
+const CL_MAX = 1.38
+const AOA_STALL = (() => {
+  let lo = 0
+  let hi = 30
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2
+    if (liftCoefficient(mid) < CL_MAX) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
+})()
+
+/** 0 before the stall, rising to 1 by the top of the scroll range. */
+function stallFraction(aoaDeg: number) {
+  return Math.min(1, Math.max(0, (aoaDeg - AOA_STALL) / (AOA_END - AOA_STALL)))
+}
+
+/** Lift coefficient with the stall applied. */
+function realLift(aoaDeg: number) {
+  const sf = stallFraction(aoaDeg)
+  return sf > 0 ? CL_MAX * (1 - 0.3 * sf) : liftCoefficient(aoaDeg)
+}
+
+const X_MIN = Math.min(...outline.map((p) => p[0]))
+const X_MAX = Math.max(...outline.map((p) => p[0]))
+// Upper-surface height by x (for placing the separated region)
+const UPPER: number[] = (() => {
+  const bins = 80
+  const arr = new Array<number>(bins).fill(-Infinity)
+  for (const [x, y] of outline) {
+    const i = Math.min(bins - 1, Math.max(0, Math.floor(((x - X_MIN) / (X_MAX - X_MIN)) * bins)))
+    arr[i] = Math.max(arr[i], y)
+  }
+  for (let i = 0; i < bins; i++) if (arr[i] === -Infinity) arr[i] = arr[Math.max(0, i - 1)] ?? 0
+  return arr
+})()
+function upperY(x: number) {
+  const i = Math.min(UPPER.length - 1, Math.max(0, Math.floor(((x - X_MIN) / (X_MAX - X_MIN)) * UPPER.length)))
+  return UPPER[i]
+}
+
 /** Velocity (body frame) at a point for flow at angle `a`; null inside the body. */
 function velocity(x: number, y: number, a: number): [number, number] | null {
   // Invert z = zeta + 1/zeta: pick the root outside the unit circle.
@@ -87,7 +132,7 @@ function velocity(x: number, y: number, a: number): [number, number] | null {
   return [fr, -fi]
 }
 
-type Particle = { x: number; y: number; px: number; py: number; life: number }
+type Particle = { x: number; y: number; px: number; py: number; life: number; sep?: boolean }
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
@@ -96,7 +141,8 @@ export function WingLab() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [aoa, setAoa] = useState(AOA_START)
 
-  const cl = liftCoefficient(aoa)
+  const cl = realLift(aoa)
+  const stalled = stallFraction(aoa) > 0.02
   const atDesign = Math.abs(aoa - DESIGN_AOA) < 0.35
 
   useEffect(() => {
@@ -177,6 +223,30 @@ export function WingLab() {
       return `rgba(${Math.round(160 + 90 * t)},${Math.round(210 - 130 * t)},${Math.round(255 - 215 * t)},0.85)`
     }
 
+    // Once the wing has stalled, some new particles are seeded inside the separated
+    // region so it reads as a churning, recirculating pocket.
+    const respawn = (p: Particle) => {
+      const sf = stallFraction(current)
+      if (sf > 0.02 && Math.random() < 0.5 * sf) {
+        const a = (current * Math.PI) / 180
+        const ca = Math.cos(a)
+        const sa = Math.sin(a)
+        const chord = X_MAX - X_MIN
+        const xsep = X_MAX - (0.05 + 0.62 * sf) * chord
+        const bx = xsep + Math.random() * (X_MAX + 0.2 * chord - xsep)
+        const surf = upperY(Math.min(bx, X_MAX))
+        const grow = Math.min(1, (bx - xsep) / (0.5 * chord))
+        const by = surf + Math.random() * (0.2 + 0.8 * grow) * chord * 0.3 * sf * 0.8
+        p.x = bx * ca + by * sa
+        p.y = -bx * sa + by * ca
+        p.px = p.x
+        p.py = p.y
+        p.life = 0.001
+        return
+      }
+      spawn(p, false)
+    }
+
     const step = (dt: number) => {
       const a = (current * Math.PI) / 180
       const ca = Math.cos(a)
@@ -190,6 +260,24 @@ export function WingLab() {
           continue
         }
         let [u, vv] = v
+        const sf = stallFraction(current)
+        p.sep = false
+        if (sf > 0.02) {
+          const bx = p.x * ca - p.y * sa
+          const by = p.x * sa + p.y * ca
+          const chord = X_MAX - X_MIN
+          const xsep = X_MAX - (0.05 + 0.62 * sf) * chord
+          if (bx > xsep && bx < X_MAX + 0.45 * chord) {
+            const surf = upperY(Math.min(bx, X_MAX))
+            const grow = Math.min(1, (bx - xsep) / (0.5 * chord))
+            const band = (0.2 + 0.8 * grow) * chord * 0.3 * sf * (0.65 + 0.35 * Math.random())
+            if (by > surf - 0.06 && by < surf + band) {
+              p.sep = true
+              u = u * (1 - 1.2 * sf) + (Math.random() - 0.5) * 1.4 * sf
+              vv = vv * (1 - 0.6 * sf) + (Math.random() - 0.5) * 1.5 * sf - 0.35 * sf
+            }
+          }
+        }
         const sp = Math.hypot(u, vv)
         if (sp > 4) {
           u = (u / sp) * 4
@@ -199,7 +287,9 @@ export function WingLab() {
         p.y += (-u * sa + vv * ca) * dt
         p.life += dt
         if (p.x > worldR + 0.6 || Math.abs(p.y) > halfH + 1.5 || p.life > 40) {
-          spawn(p, false)
+          respawn(p)
+        } else if (p.sep && p.life > 2.2) {
+          respawn(p) // recirculate: eddies don't leave the wing at once
         }
       }
     }
@@ -216,7 +306,7 @@ export function WingLab() {
         const q = v ? Math.hypot(v[0], v[1]) : 1
         const [x0, y0] = toScreen(p.px, p.py)
         const [x1, y1] = toScreen(p.x, p.y)
-        ctx.strokeStyle = speedColor(q)
+        ctx.strokeStyle = p.sep ? 'rgba(255,128,96,0.55)' : speedColor(q)
         ctx.beginPath()
         ctx.moveTo(x0, y0)
         ctx.lineTo(x1, y1)
@@ -238,7 +328,7 @@ export function WingLab() {
       ctx.strokeStyle = 'rgba(238,241,246,0.8)'
       ctx.stroke()
 
-      const c = liftCoefficient(current)
+      const c = realLift(current)
       const [ax, ay] = toScreen(-0.9 * ca, 0.9 * sa)
       const len = Math.min(Math.max(0, c) * scale * 0.8, h * 0.34)
       if (len > 6) {
@@ -340,16 +430,20 @@ export function WingLab() {
               <p className="display text-3xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
             </div>
             <div>
-              <p className="text-xs text-steel-400">Lift coefficient (idealised)</p>
+              <p className="text-xs text-steel-400">Lift coefficient</p>
               <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
             </div>
           </div>
           <p
-            className={`mx-auto mt-4 max-w-md text-xs leading-snug ${atDesign ? 'text-burn-400' : 'text-steel-400'}`}
+            className={`mx-auto mt-4 max-w-md text-xs leading-snug ${
+              stalled || atDesign ? 'text-burn-400' : 'text-steel-400'
+            }`}
           >
-            {atDesign
-              ? 'MX-01 wing incidence (2.3°).'
-              : 'Idealised flow: no drag or stall, so lift keeps climbing. Real wings stall.'}
+            {stalled
+              ? 'Stalled: the flow separates from the upper surface, lift peaks at CLmax and drops, and drag would climb.'
+              : atDesign
+                ? 'MX-01 wing incidence (2.3°).'
+                : 'Idealised flow with a stylised stall: lift peaks at CLmax 1.38 (XFoil, Re 100k).'}
           </p>
           <p className="pointer-events-auto mt-2 text-xs text-steel-400">
             Keep scrolling to pitch the wing up.{' '}
