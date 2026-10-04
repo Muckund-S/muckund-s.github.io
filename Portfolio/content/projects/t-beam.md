@@ -3,7 +3,8 @@ title: Concrete T-Beam Design and Fabrication
 subtitle: Inverted T-section reinforced concrete beam
 description: An inverted T-section reinforced concrete beam that cut concrete volume by over 20% against a standard rectangular beam while keeping its load-bearing capacity.
 category: Structures
-order: 8
+summary: "Inverted-T reinforced concrete beam using over 20% less concrete than a rectangular section."
+order: 5
 dates: Jan 2025 – May 2025
 image: tbeam-beam.jpg
 tags: ["Reinforced Concrete", "ACI 318-19", "Shear Design", "Formwork"]

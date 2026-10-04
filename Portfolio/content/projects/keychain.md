@@ -3,7 +3,8 @@ title: Mechanical Keychain Assembly
 subtitle: Four-component aluminum assembly
 description: A four-component aluminum mechanical keychain modeled in SolidWorks with GD&T, then machined on manual and CNC equipment and assembled.
 category: Design & Fabrication
-order: 9
+summary: "Four-part machined aluminum keychain, fully dimensioned with GD&T."
+order: 6
 dates: Nov 2025 – Dec 2025
 image: keychain-render.jpg
 tags: ["SolidWorks", "GD&T", "CNC Machining", "Manual Machining"]

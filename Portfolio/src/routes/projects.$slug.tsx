@@ -1,9 +1,9 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { allProjects } from 'content-collections'
-import { ArrowLeft, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 import { VideoEmbed } from '@/components/VideoEmbed'
-import { img, md } from '@/lib/site'
+import { SITE_URL, img, md } from '@/lib/site'
 
 export const Route = createFileRoute('/projects/$slug')({
   loader: ({ params }) => {
@@ -11,9 +11,21 @@ export const Route = createFileRoute('/projects/$slug')({
     if (!project) throw notFound()
     return project
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.title ?? 'Project'} | Muckund Sharma` }],
-  }),
+  head: ({ loaderData }) => {
+    const p = loaderData
+    const title = `${p?.title ?? 'Project'} | Muckund Sharma`
+    const image = p?.image ? `${SITE_URL}/img/${p.image}` : undefined
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: p?.summary ?? '' },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: p?.summary ?? '' },
+        ...(image ? [{ property: 'og:image', content: image }] : []),
+        { property: 'og:type', content: 'article' },
+      ],
+    }
+  },
   component: ProjectPage,
 })
 
@@ -54,6 +66,9 @@ function Media({ project }: { project: (typeof allProjects)[number] }) {
 
 function ProjectPage() {
   const project = Route.useLoaderData()
+  const ordered = [...allProjects].sort((a, b) => a.order - b.order)
+  const at = ordered.findIndex((p) => p._meta.path === project._meta.path)
+  const next = ordered[(at + 1) % ordered.length]
   const [zoom, setZoom] = useState<{ src: string; alt: string } | null>(null)
 
   useEffect(() => {
@@ -85,6 +100,7 @@ function ProjectPage() {
           {project.title}
         </h1>
         <p className="mt-3 text-lg text-steel-300">{project.dates}</p>
+        {project.role && <p className="mt-1 text-steel-100">{project.role}</p>}
       </header>
 
       <article
@@ -172,6 +188,32 @@ function ProjectPage() {
           </div>
         )}
       </article>
+
+      {next && (
+        <nav className="mt-10 grid gap-4 sm:grid-cols-2" aria-label="More projects">
+          <Link
+            to="/projects/$slug"
+            params={{ slug: next._meta.path }}
+            className="group rounded-2xl border border-white/10 bg-ink-900/70 p-6 hover:border-white/25"
+          >
+            <p className="text-xs text-steel-300">Next project</p>
+            <p className="display mt-1 text-xl font-bold text-white">{next.title}</p>
+            <p className="mt-2 flex items-center gap-1 text-sm text-sky-400 group-hover:text-white">
+              Read it <ArrowRight size={14} />
+            </p>
+          </Link>
+          <Link
+            to="/contact"
+            className="group rounded-2xl border border-white/10 bg-ink-900/70 p-6 hover:border-white/25"
+          >
+            <p className="text-xs text-steel-300">Interested in working together?</p>
+            <p className="display mt-1 text-xl font-bold text-white">Get in touch</p>
+            <p className="mt-2 flex items-center gap-1 text-sm text-sky-400 group-hover:text-white">
+              Contact me <ArrowRight size={14} />
+            </p>
+          </Link>
+        </nav>
+      )}
 
       {zoom && (
         <div

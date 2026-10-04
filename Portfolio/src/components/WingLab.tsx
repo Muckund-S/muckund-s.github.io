@@ -27,42 +27,90 @@ for (let i = 0; i <= 180; i++) {
 const CHORD =
   Math.max(...outline.map((p) => p[0])) - Math.min(...outline.map((p) => p[0]))
 
-const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, about 2.3°)
+const DESIGN_AOA = 2.3 // MX-01 wing mounting incidence (deg)
 const AOA_START = 0
-const AOA_END = 15
+const AOA_END = 19
 
-/** Lift coefficient from the Kutta-Joukowski theorem (U = 1). */
+/** Lift coefficient of the idealised (potential-flow) airfoil, Kutta-Joukowski, U = 1. */
 function liftCoefficient(aoaDeg: number) {
   const a = (aoaDeg * Math.PI) / 180
   const gamma = 4 * Math.PI * R * Math.sin(a + BETA)
   return (2 * gamma) / CHORD
 }
 
-// ---- Stylised stall -------------------------------------------------------
-// Potential flow has no separation, so the stall is a stylised overlay: lift
-// peaks at the XFoil CLmax for this airfoil (1.38 at Re = 100k), the flow
-// detaches from the upper surface and the lift falls away.
+// ---- MX-01 wing lift curve (XFLR5, lifting-line, Re ~ 100k) -------------------
+// Measured at 0-8 deg; beyond that the last segment's slope is extended, and the
+// wing stalls where it reaches the airfoil's XFoil CLmax (1.38 at Re = 100k).
+const XF_AOA = [0, 2, 4, 6, 8]
+const XF_CL = [0.231, 0.411, 0.574, 0.728, 0.873]
+const XF_SLOPE_HI = (XF_CL[4] - XF_CL[3]) / (XF_AOA[4] - XF_AOA[3])
+const XF_SLOPE_LO = (XF_CL[1] - XF_CL[0]) / (XF_AOA[1] - XF_AOA[0])
 const CL_MAX = 1.38
-const AOA_STALL = (() => {
-  let lo = 0
-  let hi = 30
-  for (let i = 0; i < 40; i++) {
-    const mid = (lo + hi) / 2
-    if (liftCoefficient(mid) < CL_MAX) lo = mid
-    else hi = mid
+
+function clWing(aoaDeg: number) {
+  if (aoaDeg <= 0) return XF_CL[0] + XF_SLOPE_LO * aoaDeg
+  if (aoaDeg >= 8) return XF_CL[4] + XF_SLOPE_HI * (aoaDeg - 8)
+  for (let i = 0; i < XF_AOA.length - 1; i++) {
+    if (aoaDeg <= XF_AOA[i + 1]) {
+      const t = (aoaDeg - XF_AOA[i]) / (XF_AOA[i + 1] - XF_AOA[i])
+      return XF_CL[i] + t * (XF_CL[i + 1] - XF_CL[i])
+    }
   }
-  return (lo + hi) / 2
-})()
+  return XF_CL[4]
+}
+
+/** Geometric angle at which the wing stalls (lift curve reaches CLmax). */
+const AOA_STALL = 8 + (CL_MAX - XF_CL[4]) / XF_SLOPE_HI
 
 /** 0 before the stall, rising to 1 by the top of the scroll range. */
 function stallFraction(aoaDeg: number) {
   return Math.min(1, Math.max(0, (aoaDeg - AOA_STALL) / (AOA_END - AOA_STALL)))
 }
 
-/** Lift coefficient with the stall applied. */
+/** Lift coefficient shown: the XFLR5 curve, then a stylised drop after the stall. */
 function realLift(aoaDeg: number) {
   const sf = stallFraction(aoaDeg)
-  return sf > 0 ? CL_MAX * (1 - 0.3 * sf) : liftCoefficient(aoaDeg)
+  return sf > 0 ? CL_MAX * (1 - 0.3 * sf) : clWing(aoaDeg)
+}
+
+// The wing is 3D: induced downwash lowers the angle each section really sees. The
+// 2D flow picture is drawn at that effective angle, i.e. the angle at which the
+// idealised airfoil produces the same lift as the XFLR5 wing.
+const AOA_STALL_EFF = (() => {
+  let lo = -10
+  let hi = 40
+  for (let i = 0; i < 50; i++) {
+    const mid = (lo + hi) / 2
+    if (liftCoefficient(mid) < CL_MAX) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
+})()
+const EFF_STEP = 0.1
+const EFF_TABLE: number[] = (() => {
+  const t: number[] = []
+  for (let a = -2; a <= AOA_END + 0.0001; a += EFF_STEP) {
+    if (a <= AOA_STALL) {
+      const target = clWing(a)
+      let lo = -10
+      let hi = 40
+      for (let i = 0; i < 40; i++) {
+        const mid = (lo + hi) / 2
+        if (liftCoefficient(mid) < target) lo = mid
+        else hi = mid
+      }
+      t.push((lo + hi) / 2)
+    } else {
+      t.push(AOA_STALL_EFF + 0.5 * (a - AOA_STALL))
+    }
+  }
+  return t
+})()
+function effAngle(aoaDeg: number) {
+  const f = (aoaDeg + 2) / EFF_STEP
+  const i = Math.min(EFF_TABLE.length - 2, Math.max(0, Math.floor(f)))
+  const t = Math.min(1, Math.max(0, f - i))
+  return EFF_TABLE[i] + t * (EFF_TABLE[i + 1] - EFF_TABLE[i])
 }
 
 const X_MIN = Math.min(...outline.map((p) => p[0]))
@@ -240,7 +288,7 @@ export function WingLab() {
     const respawn = (p: Particle) => {
       const sf = stallFraction(current)
       if (sf > 0.02 && Math.random() < 0.35 * Math.min(1, sf * 3)) {
-        const a = (current * Math.PI) / 180
+        const a = (effAngle(current) * Math.PI) / 180
         const ca = Math.cos(a)
         const sa = Math.sin(a)
         const bub = bubble(sf)
@@ -259,7 +307,7 @@ export function WingLab() {
     }
 
     const step = (dt: number) => {
-      const a = (current * Math.PI) / 180
+      const a = (effAngle(current) * Math.PI) / 180
       const ca = Math.cos(a)
       const sa = Math.sin(a)
       for (const p of particles) {
@@ -307,7 +355,7 @@ export function WingLab() {
     }
 
     const drawParticles = () => {
-      const a = (current * Math.PI) / 180
+      const a = (effAngle(current) * Math.PI) / 180
       const ca = Math.cos(a)
       const sa = Math.sin(a)
       ctx.lineWidth = 1.5
@@ -327,7 +375,7 @@ export function WingLab() {
     }
 
     const drawBody = () => {
-      const a = (current * Math.PI) / 180
+      const a = (effAngle(current) * Math.PI) / 180
       const ca = Math.cos(a)
       const sa = Math.sin(a)
       const pts = outline.map(([x, y]) => toScreen(x * ca + y * sa, -x * sa + y * ca))
@@ -452,13 +500,13 @@ export function WingLab() {
             }`}
           >
             {stalled
-              ? 'Stalled: the flow separates from the upper surface, lift peaks at CLmax and drops, and drag would climb.'
+              ? 'Stalled: the flow separates from the upper surface, lift peaks at CLmax and then drops (stylised).'
               : atDesign
-                ? 'MX-01 wing incidence (2.3°).'
-                : 'Idealised flow with a stylised stall: lift peaks at CLmax 1.38 (XFoil, Re 100k).'}
+                ? 'MX-01 wing mounting incidence: 2.3°.'
+                : 'Lift from the XFLR5 curve for the MX-01 wing (measured 0–8°, extended beyond). The wing stalls at the XFoil CLmax of 1.38.'}
           </p>
           <p className="pointer-events-auto mt-2 text-xs text-steel-400">
-            Keep scrolling to pitch the wing up.{' '}
+            Keep scrolling to pitch the wing up. The flow is drawn at the wing's effective angle (geometric angle minus downwash).{' '}
             <Link
               to="/projects/$slug"
               params={{ slug: 'rc-aircraft' }}

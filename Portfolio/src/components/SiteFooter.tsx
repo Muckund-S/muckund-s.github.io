@@ -19,6 +19,14 @@ export function SiteFooter() {
           >
             LinkedIn
           </a>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white"
+          >
+            GitHub
+          </a>
           <a href={`mailto:${profile.email}`} className="hover:text-white">
             Email
           </a>

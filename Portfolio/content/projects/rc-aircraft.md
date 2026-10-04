@@ -3,8 +3,10 @@ title: "MX-01: Cessna 172-Inspired RC Trainer"
 subtitle: Solo design, analysis, build and flight test
 description: Designed from scratch in SolidWorks, analyzed in XFoil, XFLR5, and ANSYS Fluent, hand-built from EPS foam, and flight-tested over 12 flights. Solo project, 2 months, about $140 in components.
 category: Aerospace
-order: 1
+summary: "Designed, analyzed and flew a hand-built RC trainer: XFLR5 peak L/D ≈ 15, 12 test flights."
+role: "Solo project: design, analysis, build and flight test."
 featured: true
+order: 1
 dates: Aug 2026 – Present
 image: rc-preflight.jpg
 videos:
