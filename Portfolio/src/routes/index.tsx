@@ -33,7 +33,7 @@ function Home() {
                 src={img(profile.schoolLogo)}
                 alt=""
                 aria-hidden="true"
-                className="h-9 w-auto sm:h-10"
+                className="h-6 w-auto sm:h-7"
               />
             )}
             <p className="text-steel-400">

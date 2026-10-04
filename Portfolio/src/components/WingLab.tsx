@@ -147,10 +147,10 @@ export function WingLab() {
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      const wide = w >= 1024
-      scale = wide ? Math.min(w / 10, h / 5) : Math.min(w / 6.2, h / 4.6)
-      cx = wide ? w * 0.36 : w / 2
-      cy = wide ? h / 2 : h * 0.27 // on phones the data sits underneath
+      // Wing centred on the page, nudged up so the numbers fit underneath it
+      scale = Math.min(w / (w >= 1024 ? 9 : 6.2), h / 4.8)
+      cx = w / 2
+      cy = h * 0.42
       worldL = cx / scale
       worldR = (w - cx) / scale
       halfH = Math.max(cy, h - cy) / scale
@@ -332,33 +332,35 @@ export function WingLab() {
           className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_bottom,transparent,#000_16%,#000_84%,transparent)]"
         />
 
-        {/* Data sits to the side, no box around it */}
-        <div className="absolute inset-x-0 bottom-[3%] mx-auto flex max-w-6xl justify-center px-6 lg:inset-y-0 lg:bottom-auto lg:items-center lg:justify-end">
-          <div className="w-full max-w-[300px] text-sm">
-            <p className="text-steel-400">Angle of attack</p>
-            <p className="display text-5xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
-
-            <p className="mt-4 text-steel-400">Lift coefficient (idealised)</p>
-            <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
-
-            <p
-              className={`mt-4 text-xs leading-snug ${atDesign ? 'text-burn-400' : 'text-steel-400'}`}
-            >
-              {atDesign
-                ? 'MX-01 wing incidence (2.3°). Best simulated L/D in my ANSYS Fluent runs: 13.9.'
-                : 'Idealised flow: no drag or stall, so lift keeps climbing. Real wings stall.'}
-            </p>
-            <p className="mt-3 text-xs text-steel-400">
-              Keep scrolling to pitch the wing up.{' '}
-              <Link
-                to="/projects/$slug"
-                params={{ slug: 'rc-aircraft' }}
-                className="text-sky-400 hover:text-white"
-              >
-                MX-01 write-up →
-              </Link>
-            </p>
+        {/* Numbers sit bottom-centre, no box around them */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[4%] px-6 text-center">
+          <div className="flex items-end justify-center gap-10 sm:gap-16">
+            <div>
+              <p className="text-sm text-steel-400">Angle of attack</p>
+              <p className="display text-5xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
+            </div>
+            <div>
+              <p className="text-sm text-steel-400">Lift coefficient (idealised)</p>
+              <p className="display text-5xl font-bold text-sky-400">{cl.toFixed(2)}</p>
+            </div>
           </div>
+          <p
+            className={`mx-auto mt-4 max-w-md text-xs leading-snug ${atDesign ? 'text-burn-400' : 'text-steel-400'}`}
+          >
+            {atDesign
+              ? 'MX-01 wing incidence (2.3°).'
+              : 'Idealised flow: no drag or stall, so lift keeps climbing. Real wings stall.'}
+          </p>
+          <p className="pointer-events-auto mt-2 text-xs text-steel-400">
+            Keep scrolling to pitch the wing up.{' '}
+            <Link
+              to="/projects/$slug"
+              params={{ slug: 'rc-aircraft' }}
+              className="text-sky-400 hover:text-white"
+            >
+              MX-01 write-up →
+            </Link>
+          </p>
         </div>
       </div>
     </section>
