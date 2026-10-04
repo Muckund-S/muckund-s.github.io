@@ -29,7 +29,7 @@ const CHORD =
 
 const DESIGN_AOA = 2.26 // MX-01 wing incidence (2.26° in the Fluent sweep, about 2.3°)
 const AOA_START = 0
-const AOA_END = 16
+const AOA_END = 15
 
 /** Lift coefficient from the Kutta-Joukowski theorem (U = 1). */
 function liftCoefficient(aoaDeg: number) {
@@ -336,12 +336,12 @@ export function WingLab() {
         <div className="pointer-events-none absolute inset-x-0 bottom-[4%] px-6 text-center">
           <div className="flex items-end justify-center gap-10 sm:gap-16">
             <div>
-              <p className="text-sm text-steel-400">Angle of attack</p>
-              <p className="display text-5xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
+              <p className="text-xs text-steel-400">Angle of attack</p>
+              <p className="display text-3xl font-extrabold text-white">{aoa.toFixed(1)}°</p>
             </div>
             <div>
-              <p className="text-sm text-steel-400">Lift coefficient (idealised)</p>
-              <p className="display text-5xl font-bold text-sky-400">{cl.toFixed(2)}</p>
+              <p className="text-xs text-steel-400">Lift coefficient (idealised)</p>
+              <p className="display text-3xl font-bold text-sky-400">{cl.toFixed(2)}</p>
             </div>
           </div>
           <p
