@@ -15,6 +15,7 @@ const links = [
   { icon: Linkedin, label: 'LinkedIn', detail: 'Connect with me', href: profile.linkedin },
   { icon: Github, label: 'GitHub', detail: 'Code and projects', href: profile.github },
   { icon: FileText, label: 'Resume', detail: 'View or download PDF', href: profile.resumeFile },
+  { icon: FileText, label: 'Portfolio', detail: 'Project summaries (PDF)', href: profile.portfolioFile },
 ]
 
 function Contact() {

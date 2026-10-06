@@ -15,6 +15,7 @@ export const profile = {
   // File name in public/img/ for the University of Waterloo logo; shown next to the title when set.
   schoolLogo: 'uwaterloo-logo.png' as string | undefined,
   resumeFile: '/Muckund-Sharma-Resume.pdf',
+  portfolioFile: '/Muckund-Sharma-Portfolio.pdf',
 }
 
 export const skillGroups = [

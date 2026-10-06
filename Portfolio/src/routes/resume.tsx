@@ -39,6 +39,17 @@ function Resume() {
             <FileText size={16} /> View Resume
           </a>
         </div>
+        <p className="mt-5 text-sm text-steel-300">
+          Project summaries (problem, approach, result):{' '}
+          <a
+            href={profile.portfolioFile}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-sky-400 underline-offset-4 hover:text-white hover:underline"
+          >
+            View Portfolio PDF
+          </a>
+        </p>
       </div>
 
       <Section title="Work Experience">
