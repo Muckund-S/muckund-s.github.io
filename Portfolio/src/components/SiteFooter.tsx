@@ -33,6 +33,9 @@ export function SiteFooter() {
           <a href={profile.resumeFile} className="hover:text-white">
             Resume
           </a>
+          <a href={profile.portfolioFile} className="hover:text-white">
+            Portfolio PDF
+          </a>
         </div>
       </div>
     </footer>
