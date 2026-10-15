@@ -1,5 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Github, Linkedin, Mail } from 'lucide-react'
+import { FlightPath } from '@/components/FlightPath'
+import { HeroBackdrop } from '@/components/HeroBackdrop'
+import { StatsBand } from '@/components/StatsBand'
 import { WingLab } from '@/components/WingLab'
 import { img, profile } from '@/lib/site'
 
@@ -9,9 +12,16 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <>
-      <section className="mx-auto grid min-h-[78vh] max-w-6xl content-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.35fr_1fr] lg:items-center">
+    <div className="relative">
+      <FlightPath />
+      <div data-waypoint="01 · HOME" className="relative">
+      <HeroBackdrop />
+      <section className="relative z-10 mx-auto grid min-h-[78vh] max-w-6xl content-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.35fr_1fr] lg:items-center">
         <div className="fade-in">
+          <p className="mono mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] uppercase text-steel-300">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#6fdc8c]" />
+            Available · Winter 2027 co-op
+          </p>
           <h1 className="display text-[clamp(3.5rem,11vw,8.5rem)] font-extrabold leading-[0.92]">
             <span className="name-line">
               <span className="name-gradient name-rise" style={{ animationDelay: '0.1s' }}>
@@ -84,10 +94,15 @@ function Home() {
           </div>
         </div>
       </section>
+      </div>
 
-      <WingLab />
+      <StatsBand />
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
+      <div data-waypoint="03 · AIRFLOW">
+        <WingLab />
+      </div>
+
+      <section data-waypoint="04 · CONTACT" className="relative z-10 mx-auto max-w-6xl px-6 py-24">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-14">
           <h2 className="display max-w-2xl text-3xl font-bold text-white md:text-5xl">
             Let's talk about what you're building.
@@ -112,7 +127,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-    </>
+    </div>
   )
 }

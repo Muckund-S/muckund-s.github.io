@@ -1,8 +1,14 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { Hud } from '@/components/Hud'
 
 import '../styles.css'
+
+// Show the boot sequence once per session, home page only, and never with reduced motion.
+// Runs in <head> so the overlay is up before the first paint.
+const bootScript =
+  "try{if(location.pathname==='/'&&!sessionStorage.getItem('boot')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){sessionStorage.setItem('boot','1');document.documentElement.classList.add('booting')}}catch(e){}"
 
 const siteName = 'Muckund Sharma | Mechanical Engineering Portfolio'
 const siteDescription =
@@ -59,8 +65,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body>
+        <div id="boot" aria-hidden="true">
+          <ol>
+            <li>MUCKUND SHARMA // PORTFOLIO</li>
+            <li>&gt; AIRFRAME ......... <span className="ok">OK</span></li>
+            <li>&gt; STRUCTURES ....... <span className="ok">OK</span></li>
+            <li>&gt; PROPULSION ....... <span className="ok">OK</span></li>
+            <li>&gt; SYSTEMS CHECK COMPLETE · CLEARED FOR TAKEOFF</li>
+          </ol>
+          <small>click or press any key to skip</small>
+        </div>
+        <Hud />
         <SiteHeader />
         <main className="min-h-screen">{children}</main>
         <SiteFooter />
