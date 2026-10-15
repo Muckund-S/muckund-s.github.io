@@ -21,12 +21,3 @@ A personal mechanical engineering portfolio for Muckund Sharma, built with TanSt
 ## Project pages and video
 
 Each project is a full page at `/projects/<file-name>`, rendered from `content/projects/<file-name>.md`. Front matter sets the card and header (title, dates, `summary` (one-line result for the cards), optional `role` (your part), `featured` for the big cards on /projects, category, tags, metrics, optional `image`, `gallery`, `problem` / `approach` / `result`); the Markdown body is the write-up (use `##` headings). To add a video, put an mp4 (H.264, ideally under 50 MB) in `public/video/` and set `video: name.mp4`, or set `youtube: <video id>` for a YouTube embed.
-
-## HUD layer
-
-A cockpit/HUD layer sits on top of the site (all `aria-hidden`, all off for reduced motion or touch where it would get in the way):
-
-- `components/Hud.tsx`: the crosshair cursor (fine pointers only), the corner-bracket frame with telemetry (altitude follows scroll up to the Polaris record of 63,497 ft; waypoint follows `data-waypoint` sections), the boot-sequence skip handler, and the `I` key that toggles the infrared palette (`html.ir` in `styles.css`).
-- The boot overlay (`#boot`) is static HTML in `__root.tsx`; an inline head script adds `html.booting` once per session on the home page only. CSS hides it again after 4 s even if JS fails.
-- `HeroBackdrop.tsx` (starfield, grid, scan line), `StatsBand.tsx` (count-up highlights; edit the numbers there and keep them true), `FlightPath.tsx` (scroll-drawn line, 1440px+ only), and the blueprint hover overlay on project cards.
-- Keep the route labels in `Hud.tsx` normalized for trailing slashes (prerendered HTML sees `/projects/`) or hydration will mismatch.
