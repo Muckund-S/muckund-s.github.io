@@ -49,6 +49,17 @@ export const Route = createRootRoute({
         name: 'twitter:card',
         content: 'summary_large_image',
       },
+      {
+        'script:ld+json': {
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Muckund Sharma',
+          url: 'https://muckund-s.github.io/',
+          jobTitle: 'Mechanical Engineering Student',
+          alumniOf: 'University of Waterloo',
+          sameAs: ['https://ca.linkedin.com/in/muckund-sharma-aa3717363'],
+        },
+      },
     ],
   }),
   shellComponent: RootDocument,
