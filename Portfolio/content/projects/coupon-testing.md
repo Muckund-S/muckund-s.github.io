@@ -2,22 +2,23 @@
 dates: Sep 2025 – May 2026
 title: Coupon Compression Testing
 subtitle: Waterloo Rocketry
-description: Standardized compression testing of six fiberglass laminates to select the Polaris rocket airframe material.
+description: Standardized compression testing of six fiberglass laminates to choose the Polaris fin plate stock. The Airstone epoxy laminate came out on top.
 category: Materials
-summary: "Compression-tested six fiberglass laminates to ASTM D695 and automated the analysis in Python."
+summary: "Compression-tested six fiberglass laminates to ASTM D695; Airstone epoxy came out on top and was used for the Polaris fin plate stock."
 role: "Core airframe team member, Waterloo Rocketry."
 featured: true
 order: 3
 image: coupon-test.jpg
 problem:
-  - Select a fiberglass laminate for the Polaris rocket airframe based on compression performance and material cost.
+  - Select a fiberglass laminate for the Polaris fin plate stock based on compression performance and material cost.
   - Compare six laminate configurations under standardized mechanical testing conditions.
 approach:
   - Machined a Boeing BSS 7260 fixture and prepared test coupons.
   - Performed standardized compression testing (ASTM D695 / DIN EN 2850) on six fiberglass laminates using a 15 kN-capacity system.
   - Developed a Python pipeline to convert load/displacement data into stress-strain curves and extract failure properties.
 result:
-  - Generated quantitative compression data for six laminate configurations, enabling comparison of their mechanical performance for airframe material selection.
+  - Generated quantitative compression data for six laminate configurations, enabling direct comparison of their mechanical performance.
+  - The Airstone epoxy laminate came out on top and was used for the Polaris fin plate stock.
 metrics:
   - value: "6"
     label: Laminates tested
@@ -28,7 +29,7 @@ tags: ["Python", "Composites", "Machining", "ASTM D695", "Data Analysis"]
 
 ## Testing
 
-I compression-tested six fiberglass laminate configurations for the Polaris rocket airframe, following ASTM D695 / DIN EN 2850 procedures on a 15 kN-capacity testing system. The aim was to compare their mechanical performance so a laminate could be selected on compression performance and material cost.
+I compression-tested six fiberglass laminate configurations for the Polaris rocket, following ASTM D695 / DIN EN 2850 procedures on a 15 kN-capacity testing system. The aim was to compare their mechanical performance so a laminate could be selected for the fin plate stock on compression performance and material cost. The Airstone epoxy laminate came out on top and was used for the fin plate stock.
 
 ## Fixture and specimens
 
