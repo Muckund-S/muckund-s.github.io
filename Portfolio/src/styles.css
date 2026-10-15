@@ -84,3 +84,35 @@ body {
   content: '';
   @apply absolute left-0 top-[0.7em] h-px w-2.5 bg-burn-500;
 }
+
+/* HUD cursor (see components/HudCursor.tsx) */
+.hud-cursor,
+.hud-cursor * {
+  cursor: none !important;
+}
+.hud-cursor.hud-native,
+.hud-cursor.hud-native * {
+  cursor: auto !important;
+}
+.hud-ring {
+  border: 1px solid color-mix(in srgb, var(--color-burn-500) 70%, transparent);
+  border-radius: 9999px;
+  background:
+    linear-gradient(var(--color-burn-500), var(--color-burn-500)) 50% 0 / 1px 6px no-repeat,
+    linear-gradient(var(--color-burn-500), var(--color-burn-500)) 50% 100% / 1px 6px no-repeat,
+    linear-gradient(var(--color-burn-500), var(--color-burn-500)) 0 50% / 6px 1px no-repeat,
+    linear-gradient(var(--color-burn-500), var(--color-burn-500)) 100% 50% / 6px 1px no-repeat;
+}
+.hud-lock {
+  --c: var(--color-burn-500);
+  --s: 10px;
+  background:
+    linear-gradient(var(--c), var(--c)) 0 0 / var(--s) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) 0 0 / 1px var(--s) no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 0 / var(--s) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 0 / 1px var(--s) no-repeat,
+    linear-gradient(var(--c), var(--c)) 0 100% / var(--s) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) 0 100% / 1px var(--s) no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 100% / var(--s) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 100% / 1px var(--s) no-repeat;
+}

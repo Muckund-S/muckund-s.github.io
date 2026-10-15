@@ -1,6 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { HudCursor } from '@/components/HudCursor'
 
 import '../styles.css'
 
@@ -75,6 +76,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <SiteHeader />
         <main className="min-h-screen">{children}</main>
         <SiteFooter />
+        <HudCursor />
         <Scripts />
       </body>
     </html>
