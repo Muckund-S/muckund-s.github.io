@@ -15,6 +15,19 @@ function Cover({ project, className }: { project: Project; className: string }) 
         />
       )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/55 via-transparent to-transparent" />
+      <div className="card-blueprint" aria-hidden="true" />
+      {project.tags && project.tags.length > 0 && (
+        <div
+          className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          aria-hidden="true"
+        >
+          {project.tags.slice(0, 4).map((t) => (
+            <span key={t} className="spec-chip">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -29,7 +42,7 @@ export function FeaturedCard({ project, index }: { project: Project; index: numb
     >
       <Cover project={project} className="aspect-[16/10] md:aspect-auto md:min-h-[320px]" />
       <div className="flex flex-col p-6 md:p-9">
-        <p className="text-sm text-steel-300">
+        <p className="mono text-xs uppercase text-steel-300">
           <span className="font-semibold text-sky-400">0{index + 1}</span> · {project.category}{' '}
           · {project.dates}
         </p>
@@ -66,7 +79,7 @@ export function CompactCard({ project }: { project: Project }) {
     >
       <Cover project={project} className="h-full min-h-[120px]" />
       <div className="p-4 sm:p-5">
-        <p className="text-xs text-steel-300">
+        <p className="mono text-[11px] uppercase text-steel-300">
           {project.category} · {project.dates}
         </p>
         <h3 className="display mt-1 text-lg font-bold leading-snug text-white">{project.title}</h3>
