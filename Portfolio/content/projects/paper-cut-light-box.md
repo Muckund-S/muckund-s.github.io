@@ -17,96 +17,72 @@ metrics:
   - value: "7.5 × 5.5 in"
     label: Frame interior
 problem:
-  - Design and build a paper cut light box that tells a story from a film or TV show.
-  - Stay inside the brief. The acrylic is no larger than 5¾ × 7¾ in., the frame interior no larger than 5½ × 7½ in., the frame and stand are pine, the designs are drawn in AutoCAD or Illustrator, and the lights are soldered to a 9 V battery.
+  - Design and build a layered paper cut light box that tells a story from a film.
+  - Meet the assignment limits. The acrylic is at most 5¾ × 7¾ in., the frame and stand are pine, and the LEDs are soldered to a 9 V battery.
 approach:
-  - Storyboarded the first Back to the Future film into five layers (logo, DeLorean and speedometer, Doc and Marty, Enchantment Under the Sea, flux capacitor), sketched them, and drew them in Adobe Illustrator for the laser cutter.
-  - Built the pine frame with 45° mitre cuts, then sanded, stained and glued it. Cut a trapezoidal stand on the band saw with a drilled cavity for the battery.
-  - Soldered two warm-white LED strips to the battery and drew the circuit diagram in AutoCAD.
+  - Divided the first Back to the Future film into five layers, sketched them, and drew them in Adobe Illustrator for the laser cutter.
+  - Built a mitred pine frame and a trapezoidal stand with an internal battery cavity.
+  - Soldered warm-white LED strips and documented the circuit in AutoCAD.
 result:
-  - A working, lit light box that fits its frame and stand, with five story layers plus a masking layer spaced with foam board.
-  - Found that the LED strips would show through the open back layer before gluing them in, and added a sixth blank layer to hide them.
-  - For a next version, I would add one or two more layers for more depth.
+  - A working, lit light box with five story layers and one masking layer, built within the size limits.
+  - The exposed-LED problem was identified before assembly and resolved with a masking layer.
 ---
 
 ## Overview
 
-For my Technological Design course I designed and built a paper cut light box that tells a story from a movie. I chose Back to the Future. I started from a layered design I found while researching, and added my own layout, including the speedometer and the retro logo block along the bottom.
+This light box was designed and built for the Technological Design course at Bur Oak Secondary School. It depicts Back to the Future and was built to the assignment limits: acrylic of at most 5¾ × 7¾ in., a pine frame and stand, designs drawn in Illustrator or AutoCAD, and LEDs soldered to a 9 V battery.
 
-| Constraint | Limit |
-| --- | --- |
-| Acrylic | No larger than 5¾ × 7¾ in. |
-| Frame interior | No larger than 5½ × 7½ in. |
-| Electronics | Connected to a 9 V battery by soldering |
-| Frame and stand | Pine |
-| Design software | AutoCAD or Illustrator |
+## Design
 
-## Concept and layers
-
-The box tells a short version of the first film. The layers are stacked with spacers between them, so the scene builds up in depth as light passes through.
-
-- **Logo:** the Back to the Future logo tells you what the box is about at a glance.
-- **The DeLorean:** its silhouette, with the 88 MPH speedometer in the corner.
-- **Doc Brown and Marty McFly:** the two main characters.
-- **Enchantment Under the Sea:** Marty and Marvin Berry at the dance.
-- **The flux capacitor:** the "Y" that makes time travel possible.
+The first film is told in five layers: the logo, the DeLorean with its speedometer, Doc Brown and Marty McFly, the Enchantment Under the Sea dance, and the flux capacitor. Each layer was sketched, then drawn in Illustrator on a 7.5 × 5.5 in. artboard with 0.001 pt red cut lines for the laser cutter. The logo and speedometer block was laid out in Canva.
 
 <figure>
 <img src="/img/lightbox-layers.png" alt="The five laser-cut layers drawn in Illustrator, with red cut lines on white" loading="lazy" />
-<figcaption>The five layers as drawn in Illustrator (red cut lines). Layers 1 to 5, left to right.</figcaption>
+<figcaption>The five layers as drawn in Illustrator (red cut lines).</figcaption>
 </figure>
-
-## From sketch to cut file
-
-I sketched each layer on paper first. That showed me how the layers add up to depth, especially for the speedometer, which is built from three layers. I designed the bottom logo and speedometer block in Canva, using lighter colors for the layers nearer the light.
 
 <figure>
 <img src="/img/lightbox-layout.png" alt="Canva layout of the bottom of the light box: the DeLorean, the Back to the Future logo and the 88 MPH speedometer" loading="lazy" />
-<figcaption>The bottom layout, designed in Canva before the cut files.</figcaption>
+<figcaption>Bottom layout, designed in Canva.</figcaption>
 </figure>
 
-In Illustrator I set the artboard to 7.5 × 5.5 in., the frame opening in the brief, and set every cut line to a 0.001 pt red stroke so the laser cutter would treat it as a cut. The pen tool was hard at first, but with practice I traced my sketches closely. Before cutting I pasted all the layers onto one artboard to check that they lined up.
+## Construction
 
-## Frame and stand
-
-I cut the pine for the frame on the mitre saw at 45° to an inside opening of 7.5 × 5.5 in., then sanded the pieces and the acrylic so everything fit.
+The pine frame was cut at 45° on the mitre saw, then sanded, stained and glued. The stand is a trapezoid cut on the band saw, with a drilled 17.5 × 48.5 mm cavity, about 19 mm deep, that holds the battery. Combining the stand and battery holder in one piece reduced material use.
 
 <figure>
 <img src="/img/lightbox-frame-parts.jpg" alt="Cut and sanded pine frame pieces next to the sanded acrylic panel" loading="lazy" />
-<figcaption>The mitred pine frame pieces and the sanded acrylic.</figcaption>
+<figcaption>Mitred pine frame pieces and sanded acrylic.</figcaption>
 </figure>
-
-For the stand I made a trapezoid on the band saw with the battery cavity built into it. Other people made a separate battery slot, but one two-in-one piece used less material. I traced a 17.5 × 48.5 mm rectangle, drilled it out to about 19 mm deep on the drill press and sanded the inside.
 
 <figure>
 <img src="/img/lightbox-stand.jpg" alt="The trapezoidal stand with its battery cavity, bare and then stained" loading="lazy" />
-<figcaption>The stand with its 9 V battery cavity, bare and after staining.</figcaption>
+<figcaption>Stand with battery cavity, bare and stained.</figcaption>
 </figure>
 
 ## Electronics
 
-I soldered two 4-inch warm-white LED strips, which were brighter than RGB and gave the warm, retro look I wanted. The circuit, drawn in AutoCAD, runs 11 LEDs from the 9 V battery, with a 350 Ω resistor for each LED. A cardboard backboard holds everything in, with a small hole for the battery terminal.
+Two 4-inch warm-white LED strips were soldered to the battery, giving 11 LEDs with a 350 Ω resistor each, as shown in the AutoCAD circuit diagram.
 
 <figure>
 <img src="/img/lightbox-circuit.png" alt="AutoCAD wiring diagram: a 9 V battery feeding 11 warm-white LEDs, each with a 350 ohm resistor" loading="lazy" />
-<figcaption>The circuit diagram, drawn in AutoCAD.</figcaption>
+<figcaption>Circuit diagram, drawn in AutoCAD.</figcaption>
 </figure>
 
-## Problems and fixes
+## Challenges
 
-- **First stain looked rotten.** The first coat made the wood look decayed. Three more coats gave the look I wanted, and I finished with a semi-gloss coat.
-- **Stain and gloss blocked the glue.** The finish stopped the frame joints bonding. I sanded the glue faces back and used more glue, with ratchet straps to hold it while it dried.
-- **Foam spacers too wide.** The spacers that separate the layers stuck out past the edges, so I cut them in half with an Exacto knife.
-- **LED strips visible from the front.** The last layer is open at the back, so the strips and backboard would have shown through. I caught this before attaching them and added one blank layer to mask them while still letting the light through.
+- The stain and gloss weakened the glue joints, so the faces were resanded and re-glued under ratchet straps.
+- Oversized foam spacers were cut in half with a knife.
+- The open back layer would have exposed the LED strips, so a blank masking layer was added before they were fitted.
 
 <figure>
 <img src="/img/lightbox-back.jpg" alt="The stacked laser-cut layers inside the pine frame, unlit, before the LED strips and backboard were fitted" loading="lazy" />
-<figcaption>The stacked layers in the frame, unlit, before the LED strips and backboard went in.</figcaption>
+<figcaption>Stacked layers, unlit, before the LED strips were fitted.</figcaption>
 </figure>
 
-## Final result
+## Outcome
 
-The finished box stands on its own, with the battery tucked inside the stand.
+The finished light box stands on its own with the battery housed in the stand. A further version would add one or two layers for greater depth.
 
 <div class="fig-row">
 <figure>
@@ -115,10 +91,6 @@ The finished box stands on its own, with the battery tucked inside the stand.
 </figure>
 <figure>
 <img src="/img/lightbox-angle.jpg" alt="The finished light box lit from behind, angled view showing the depth of the layers" loading="lazy" />
-<figcaption>Angled view, where the layer depth shows.</figcaption>
+<figcaption>Angled view.</figcaption>
 </figure>
 </div>
-
-## Reflection
-
-I improved my soldering, Illustrator, AutoCAD and woodworking skills on this project. If I built it again I would add one or two more layers for more depth and detail.
