@@ -100,8 +100,8 @@ I soldered two 4-inch warm-white LED strips, which were brighter than RGB and ga
 - **LED strips visible from the front.** The last layer is open at the back, so the strips and backboard would have shown through. I caught this before attaching them and added one blank layer to mask them while still letting the light through.
 
 <figure>
-<img src="/img/lightbox-back.jpg" alt="The back of the frame with the laser-cut layers and foam spacers before the backboard is fitted" loading="lazy" />
-<figcaption>The layers and spacers seen from the back, before the LED strips and backboard went in.</figcaption>
+<img src="/img/lightbox-back.jpg" alt="The stacked laser-cut layers inside the pine frame, unlit, before the LED strips and backboard were fitted" loading="lazy" />
+<figcaption>The stacked layers in the frame, unlit, before the LED strips and backboard went in.</figcaption>
 </figure>
 
 ## Final result
