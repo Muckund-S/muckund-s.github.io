@@ -1,6 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { Analytics } from '@/components/Analytics'
 
 import '../styles.css'
 
@@ -59,8 +60,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          data-goatcounter="https://muckund.goatcounter.com/count"
+          async
+          src="https://gc.zgo.at/count.js"
+        />
       </head>
       <body>
+        <Analytics />
         <SiteHeader />
         <main className="min-h-screen">{children}</main>
         <SiteFooter />

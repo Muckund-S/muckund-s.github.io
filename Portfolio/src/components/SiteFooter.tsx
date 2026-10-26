@@ -9,6 +9,9 @@ export function SiteFooter() {
           <p className="mt-1 text-sm text-steel-400">
             © {new Date().getFullYear()} {profile.name}. {profile.school}, Waterloo, Ontario.
           </p>
+          <p className="mt-1 text-xs text-steel-400/80">
+            Privacy-friendly visit counts via GoatCounter. No cookies, no personal data.
+          </p>
         </div>
         <div className="flex gap-6 text-sm">
           <a
