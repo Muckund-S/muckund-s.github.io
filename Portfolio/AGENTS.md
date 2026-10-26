@@ -21,3 +21,7 @@ A personal mechanical engineering portfolio for Muckund Sharma, built with TanSt
 ## Project pages and video
 
 Each project is a full page at `/projects/<file-name>`, rendered from `content/projects/<file-name>.md`. Front matter sets the card and header (title, dates, `summary` (one-line result for the cards), optional `role` (your part), `featured` for the big cards on /projects, category, tags, metrics, optional `image`, `gallery`, `problem` / `approach` / `result`); the Markdown body is the write-up (use `##` headings). To add a video, put an mp4 (H.264, ideally under 50 MB) in `public/video/` and set `video: name.mp4`, or set `youtube: <video id>` for a YouTube embed.
+
+## Analytics
+
+GoatCounter (cookieless, free) at `muckund.goatcounter.com`. The script tag is in `__root.tsx`; `components/Analytics.tsx` counts client-side route changes as pageviews and PDF clicks as `download/<file>` events. Share links like `https://muckund.ca/?ref=companyname` to see which application a visit came from. To exclude your own visits, open `https://muckund.ca/#toggle-goatcounter` once per browser.
